@@ -1,0 +1,17 @@
+[
+  {
+    "titulo": "Receptor µ-opioide + fentanilo y análogos",
+    "cliente": "",
+    "resumen": "Docking molecular del receptor µ-opioide humano (MOR, PDB 8EF5) con fentanilo y dos análogos N-fenilpiperidínicos (NF1, NF2), en modo dirigido al sitio ortostérico y en barrido ciego de toda la proteína. Los tres compuestos alcanzan afinidades de −9.0 a −9.4 kcal/mol; en el barrido ciego los análogos forman 3 puentes de hidrógeno con el bolsillo ortostérico frente a 1 del fentanilo.",
+    "etiquetas": ["GPCR", "AutoDock Vina / smina", "Docking dirigido + ciego", "3 ligandos"],
+    "enlace": "https://github.com/Axolotl-Discovery/AXD-GAL-26-01",
+    "estructuras": [
+      { "nombre": "Fentanilo · sitio",  "archivo": "./assets/proyectos/AXD-GAL-26-01/MOR_fentanilo_site2.pdb" },
+      { "nombre": "NF1 · sitio",        "archivo": "./assets/proyectos/AXD-GAL-26-01/MOR_NF1_site2.pdb", "nota": "Análogo para-NH₂" },
+      { "nombre": "NF2 · sitio",        "archivo": "./assets/proyectos/AXD-GAL-26-01/MOR_NF2_site2.pdb", "nota": "Análogo para-OH" },
+      { "nombre": "Fentanilo · ciego",  "archivo": "./assets/proyectos/AXD-GAL-26-01/MOR_fentanilo_blind.pdb" },
+      { "nombre": "NF1 · ciego",        "archivo": "./assets/proyectos/AXD-GAL-26-01/MOR_NF1_blind.pdb", "nota": "Análogo para-NH₂" },
+      { "nombre": "NF2 · ciego",        "archivo": "./assets/proyectos/AXD-GAL-26-01/MOR_NF2_blind.pdb", "nota": "Análogo para-OH" }
+    ]
+  }
+]

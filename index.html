@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Axolotl Discovery — Docking Molecular &amp; Drug Discovery</title>
+<meta name="description" content="Servicios de docking molecular y drug discovery computacional: cribado virtual, modelado de receptores y análisis de interacciones proteína-ligando.">
+<link rel="icon" type="image/png" href="./assets/logo-icono.png">
+<style>
+  :root {
+    --rosa: #AD4670;
+    --rosa-dark: #8f3a5c;
+    --ink: #111111;
+    --gray-700: #374151;
+    --gray-500: #6b7280;
+    --gray-400: #9ca3af;
+    --gray-200: #e5e7eb;
+    --gray-100: #f5f5f5;
+    --bg: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.5;
+  }
+  a { color: inherit; }
+  img { max-width: 100%; display: block; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---- Nav ---- */
+  header.nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.94);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--gray-200);
+  }
+  header.nav .wrap {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 14px; padding-bottom: 14px;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .brand img { height: 34px; }
+  .brand span { font-weight: 700; font-size: 15px; letter-spacing: 0.5px; }
+  nav.links { display: flex; gap: 28px; }
+  nav.links a {
+    text-decoration: none; font-size: 13.5px; font-weight: 600;
+    color: var(--gray-700); letter-spacing: 0.2px;
+  }
+  nav.links a:hover { color: var(--rosa); }
+  .nav-cta {
+    background: var(--rosa); color: #fff !important; padding: 9px 18px;
+    border-radius: 30px; font-size: 13px; font-weight: 700; text-decoration: none;
+    white-space: nowrap;
+  }
+  .nav-cta:hover { background: var(--rosa-dark); }
+
+  /* ---- Hero ---- */
+  .hero {
+    padding: 84px 0 70px 0;
+    text-align: center;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .hero img.icon { height: 150px; margin: 0 auto 26px auto; }
+  .hero h1 {
+    font-size: 34px; font-weight: 700; margin: 0 0 16px 0; line-height: 1.2;
+  }
+  .hero h1 em { color: var(--rosa); font-style: normal; }
+  .hero p.lead {
+    max-width: 560px; margin: 0 auto 32px auto; color: var(--gray-500); font-size: 16px;
+  }
+  .hero .cta-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    display: inline-block; padding: 13px 28px; border-radius: 30px;
+    font-size: 14px; font-weight: 700; text-decoration: none; border: 1.5px solid var(--ink);
+  }
+  .btn-primary { background: var(--rosa); border-color: var(--rosa); color: #fff; }
+  .btn-primary:hover { background: var(--rosa-dark); border-color: var(--rosa-dark); }
+  .btn-outline { background: transparent; color: var(--ink); }
+  .btn-outline:hover { background: var(--gray-100); }
+
+  .badges { display: flex; gap: 16px; justify-content: center; margin-top: 46px; flex-wrap: wrap; }
+  .badge {
+    border: 1px solid var(--gray-200); border-radius: 6px; padding: 14px 20px; min-width: 150px;
+  }
+  .badge .n { display: block; font-weight: 700; font-size: 14px; color: var(--rosa); }
+  .badge .l { display: block; font-size: 10.5px; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.8px; margin-top: 4px; }
+
+  /* ---- Sections generic ---- */
+  section { padding: 72px 0; }
+  section.alt { background: var(--gray-100); }
+  .section-head { text-align: center; max-width: 620px; margin: 0 auto 44px auto; }
+  .section-head .kicker { color: var(--rosa); font-weight: 700; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; }
+  .section-head h2 { font-size: 26px; margin: 8px 0 10px 0; }
+  .section-head p { color: var(--gray-500); font-size: 14.5px; margin: 0; }
+
+  .includes {
+    background: #fff; border: 1px solid var(--gray-200); border-left: 4px solid var(--rosa);
+    border-radius: 6px; padding: 20px 26px; font-size: 14px; line-height: 1.6; color: var(--gray-700);
+    max-width: 820px; margin: 0 auto 48px auto;
+  }
+  .includes b { color: var(--ink); }
+
+  /* ---- Servicios grid ---- */
+  .svc-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px;
+  }
+  .svc-card {
+    border: 1px solid var(--gray-200); border-left: 4px solid var(--rosa); border-radius: 8px;
+    padding: 22px 24px; background: #fff; display: flex; flex-direction: column;
+  }
+  .svc-card .top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .svc-card h3 { font-size: 17px; margin: 0; }
+  .svc-card .price { font-size: 17px; font-weight: 700; color: var(--rosa); white-space: nowrap; }
+  .svc-card p.scope { font-size: 13.5px; color: var(--gray-700); margin: 8px 0 6px 0; line-height: 1.5; flex-grow: 1; }
+  .svc-card .tag { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--gray-400); margin-bottom: 14px; }
+  .svc-card button.choose, .svc-card button.choose-dm {
+    align-self: flex-start; background: none; border: 1.5px solid var(--ink); color: var(--ink);
+    padding: 8px 18px; border-radius: 24px; font-size: 12.5px; font-weight: 700; cursor: pointer;
+  }
+  .svc-card button.choose:hover, .svc-card button.choose-dm:hover { background: var(--ink); color: #fff; }
+
+  /* ---- Proceso ---- */
+  .steps {
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; text-align: center;
+  }
+  .step .num {
+    width: 34px; height: 34px; border-radius: 50%; background: var(--rosa); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;
+    margin: 0 auto 10px auto;
+  }
+  .step .label { font-size: 11.5px; color: var(--gray-700); line-height: 1.4; }
+
+  /* ---- Cotiza / form ---- */
+  form.quote {
+    max-width: 640px; margin: 0 auto; background: #fff; border: 1px solid var(--gray-200);
+    border-radius: 10px; padding: 34px 36px;
+  }
+  .field { margin-bottom: 18px; }
+  .field label { display: block; font-size: 12.5px; font-weight: 700; margin-bottom: 6px; color: var(--gray-700); }
+  .field input, .field select, .field textarea {
+    width: 100%; padding: 11px 13px; border: 1px solid var(--gray-200); border-radius: 6px;
+    font-size: 14px; font-family: inherit; color: var(--ink); background: #fff;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--rosa); }
+  .field-row { display: flex; gap: 16px; }
+  .field-row .field { flex: 1; }
+  form.quote button[type="submit"] {
+    width: 100%; padding: 14px; background: var(--rosa); color: #fff; border: none;
+    border-radius: 30px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 6px;
+  }
+  form.quote button[type="submit"]:hover { background: var(--rosa-dark); }
+  .form-note { font-size: 12px; color: var(--gray-500); text-align: center; margin-top: 14px; line-height: 1.5; }
+  .form-note a { color: var(--rosa); font-weight: 600; text-decoration: none; }
+
+  /* ---- Footer ---- */
+  footer {
+    border-top: 1px solid var(--gray-200); padding: 40px 0; text-align: center;
+  }
+  footer img { height: 30px; margin: 0 auto 12px auto; }
+  footer .tag { font-size: 11px; color: var(--gray-400); letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 6px; }
+  footer .contact { font-size: 13px; color: var(--gray-700); }
+  footer .contact a { color: var(--rosa); font-weight: 600; text-decoration: none; }
+  footer .copy { font-size: 11px; color: var(--gray-400); margin-top: 14px; }
+
+  .proyectos-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px;
+  }
+  .proyecto-card {
+    background: #fff; border: 1px solid var(--gray-200); border-radius: 8px;
+    overflow: hidden; display: flex; flex-direction: column;
+  }
+  .proyecto-card img.thumb {
+    width: 100%; height: 160px; object-fit: cover; background: var(--gray-100);
+  }
+  .proyecto-card .body { padding: 20px 22px; display: flex; flex-direction: column; flex-grow: 1; }
+  .proyecto-card h3 { font-size: 16px; margin: 0 0 4px 0; }
+  .proyecto-card .cliente { font-size: 11.5px; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .proyecto-card p.resumen { font-size: 13.5px; color: var(--gray-700); line-height: 1.5; flex-grow: 1; margin: 0 0 12px 0; }
+  .proyecto-card .etiquetas { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .proyecto-card .etiqueta {
+    font-size: 10.5px; font-weight: 700; color: var(--rosa); background: #fdf1f5;
+    padding: 4px 10px; border-radius: 20px;
+  }
+  .proyecto-card a.enlace { font-size: 12.5px; font-weight: 700; color: var(--ink); text-decoration: none; }
+  .proyecto-card a.enlace:hover { color: var(--rosa); }
+  /* ---- Visor 3D de estructuras (portafolio) ---- */
+  .proyecto-card.con-visor { grid-column: 1 / -1; flex-direction: row; }
+  .proyecto-card.con-visor .visor-col { flex: 1.35; min-width: 0; border-right: 1px solid var(--gray-200); display: flex; flex-direction: column; }
+  .proyecto-card.con-visor .body { flex: 1; }
+  .visor-wrap { position: relative; height: 380px; background: #0f1117; }
+  .visor-wrap:fullscreen { height: 100vh; }
+  .visor-canvas { position: absolute; inset: 0; }
+  .visor-msg {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    color: #9ca3af; font-size: 13px; text-align: center; padding: 20px; pointer-events: none;
+  }
+  .visor-info {
+    position: absolute; left: 12px; top: 12px; z-index: 5; pointer-events: none;
+    background: rgba(15,17,23,0.78); color: #fff; border-radius: 6px; padding: 8px 12px;
+    font-size: 12px; line-height: 1.45; max-width: 70%;
+  }
+  .visor-info b { color: #f3a6c4; }
+  .visor-tools { position: absolute; right: 10px; top: 10px; z-index: 5; display: flex; gap: 6px; }
+  .visor-tools button, .visor-toggles button {
+    background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 16px; padding: 5px 11px; font-size: 11.5px; font-weight: 600; cursor: pointer;
+    font-family: inherit;
+  }
+  .visor-tools button:hover, .visor-toggles button:hover { background: rgba(255,255,255,0.25); }
+  .visor-toggles {
+    position: absolute; left: 10px; bottom: 10px; right: 10px; z-index: 5;
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .visor-toggles button.on { background: var(--rosa); border-color: var(--rosa); }
+  .visor-select { padding: 12px 14px; display: flex; flex-wrap: wrap; gap: 6px; background: #fff; }
+  .visor-select button {
+    background: #fff; border: 1px solid var(--gray-200); color: var(--gray-700);
+    border-radius: 20px; padding: 6px 12px; font-size: 12px; font-weight: 600; cursor: pointer;
+    font-family: inherit;
+  }
+  .visor-select button:hover { border-color: var(--rosa); color: var(--rosa); }
+  .visor-select button.activo { background: var(--rosa); border-color: var(--rosa); color: #fff; }
+  .visor-hint { font-size: 11.5px; color: var(--gray-400); margin: 0 0 12px 0; }
+  .proyectos-vacio {
+    text-align: center; color: var(--gray-500); font-size: 14px; padding: 40px 20px;
+    border: 1px dashed var(--gray-400); border-radius: 8px; max-width: 520px; margin: 0 auto;
+  }
+
+  @media (max-width: 760px) {
+    nav.links { display: none; }
+    .svc-grid { grid-template-columns: 1fr; }
+    .proyectos-grid { grid-template-columns: 1fr; }
+    .proyecto-card.con-visor { flex-direction: column; }
+    .proyecto-card.con-visor .visor-col { border-right: none; border-bottom: 1px solid var(--gray-200); }
+    .visor-wrap { height: 320px; }
+    .visor-info { max-width: 60%; font-size: 11px; }
+    .steps { grid-template-columns: repeat(3, 1fr); row-gap: 24px; }
+    .field-row { flex-direction: column; gap: 0; }
+    .hero h1 { font-size: 27px; }
+    form.quote { padding: 26px 22px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">
+      <img src="./assets/logo-icono.png" alt="Axolotl Discovery">
+      <span>AXOLOTL DISCOVERY</span>
+    </a>
+    <nav class="links">
+      <a href="#servicios">Servicios</a>
+      <a href="#proceso">Cómo trabajamos</a>
+      <a href="#proyectos">Proyectos</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <a class="nav-cta" href="#cotiza">Cotizar proyecto</a>
+  </div>
+</header>
+
+<div id="top"></div>
+<section class="hero">
+  <div class="wrap">
+    <img class="icon" src="./assets/logo-full.png" alt="Axolotl Discovery">
+    <h1>Docking molecular y <em>drug discovery</em><br>computacional</h1>
+    <p class="lead">
+      Cribado virtual, modelado de receptores y análisis de interacciones
+      proteína-ligando para tu proyecto de investigación, tesis o
+      desarrollo de fármacos.
+    </p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#servicios">Ver paquetes</a>
+      <a class="btn btn-outline" href="#cotiza">Cotizar mi proyecto</a>
+    </div>
+    <div class="badges">
+      <div class="badge"><span class="n">8 paquetes</span><span class="l">A la medida de tu proyecto</span></div>
+      <div class="badge"><span class="n">Vina · Smina · AD4</span><span class="l">Motores de docking</span></div>
+      <div class="badge"><span class="n">AlphaFold2</span><span class="l">Modelado de receptores</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="servicios">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Servicios</div>
+      <h2>Paquetes de docking</h2>
+      <p>Elige según número de dianas (proteínas objetivo) y de ligandos a evaluar.</p>
+    </div>
+
+    <div class="includes">
+      <b>Todo trabajo de docking incluye:</b> preparación de los ligandos y asesoría para
+      elegirlos si no los tienes definidos, 5 a 10 figuras profesionales, un documento de
+      análisis con metodología, resultados y una breve discusión con mini revisión
+      bibliográfica, y entre 2 y 5 controles positivos y negativos en total.
+    </div>
+
+    <div class="svc-grid">
+      <div class="svc-card">
+        <div class="top"><h3>Ajolote Explorador</h3><span class="price">$1,200</span></div>
+        <p class="scope">Docking en 1 diana, hasta 5 ligandos.</p>
+        <div class="tag">Entrada · ideal para primer acercamiento</div>
+        <button class="choose" data-pkg="Ajolote Explorador">Elegir este paquete</button>
+      </div>
+      <div class="svc-card">
+        <div class="top"><h3>Ajolote Certero</h3><span class="price">$2,000</span></div>
+        <p class="scope">Docking en 1 diana, hasta 10 ligandos.</p>
+        <div class="tag">Cribado ampliado de una sola diana</div>
+        <button class="choose" data-pkg="Ajolote Certero">Elegir este paquete</button>
+      </div>
+      <div class="svc-card">
+        <div class="top"><h3>Ajolote a la Medida</h3><span class="price">Cotización</span></div>
+        <p class="scope">Docking en 1 diana, 15 ligandos en adelante.</p>
+        <div class="tag">Volumen alto · precio negociable</div>
+        <button class="choose" data-pkg="Ajolote a la Medida">Elegir este paquete</button>
+      </div>
+      <div class="svc-card">
+        <div class="top"><h3>Quinto Sol</h3><span class="price">$2,500</span></div>
+        <p class="scope">Cribado en 5 dianas, hasta 5 ligandos por diana.</p>
+        <div class="tag">Multi-diana · alcance medio</div>
+        <button class="choose" data-pkg="Quinto Sol">Elegir este paquete</button>
+      </div>
+      <div class="svc-card">
+        <div class="top"><h3>Xochimilco</h3><span class="price">$3,000</span></div>
+        <p class="scope">Cribado en 10 dianas, de 5 a 10 ligandos por diana.</p>
+        <div class="tag">Multi-diana · alcance amplio</div>
+        <button class="choose" data-pkg="Xochimilco">Elegir este paquete</button>
+      </div>
+      <div class="svc-card">
+        <div class="top"><h3>Alebrije</h3><span class="price">$2,000</span></div>
+        <p class="scope">Modelado de receptor con AlphaFold2 (sin estructura cristalográfica)
+          + docking hasta 5 ligandos. Incluye análisis de fiabilidad del modelo mediante
+          análogos estructurales.</p>
+        <div class="tag">Cuando no existe estructura experimental</div>
+        <button class="choose" data-pkg="Alebrije">Elegir este paquete</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="dinamica-molecular">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Complemento</div>
+      <h2>Validación por dinámica molecular</h2>
+      <p>Para confirmar la estabilidad de las poses obtenidas por docking.</p>
+    </div>
+
+    <div class="svc-grid">
+      <div class="svc-card">
+        <div class="top"><h3>Rebozo Corto</h3><span class="price">$5,000</span></div>
+        <p class="scope">Dinámica molecular de 10 ns sobre el complejo receptor-ligando.</p>
+        <div class="tag">Validación rápida de estabilidad</div>
+        <button class="choose-dm" data-dm="Rebozo Corto">Agregar este complemento</button>
+      </div>
+      <div class="svc-card">
+        <div class="top"><h3>Rebozo Largo</h3><span class="price">$10,000</span></div>
+        <p class="scope">Dinámica molecular de 20 a 50 ns sobre el complejo receptor-ligando.</p>
+        <div class="tag">Validación extendida de estabilidad</div>
+        <button class="choose-dm" data-dm="Rebozo Largo">Agregar este complemento</button>
+      </div>
+    </div>
+
+    <div class="includes" style="margin-top:28px; border-left-color: var(--gray-400);">
+      Rebozo Corto y Rebozo Largo son complementos de validación y se cotizan junto con el
+      paquete de docking correspondiente — no lo sustituyen.
+    </div>
+  </div>
+</section>
+
+<section id="proceso" class="alt">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Metodología</div>
+      <h2>Cómo trabajamos</h2>
+      <p>Un flujo estandarizado y reproducible en cada proyecto.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="num">1</div><div class="label">Estructura del receptor</div></div>
+      <div class="step"><div class="num">2</div><div class="label">Limpieza y conversión PDBQT</div></div>
+      <div class="step"><div class="num">3</div><div class="label">Ligandos y grid box</div></div>
+      <div class="step"><div class="num">4</div><div class="label">Docking (Vina / smina / AD4)</div></div>
+      <div class="step"><div class="num">5</div><div class="label">Interacciones y figuras</div></div>
+      <div class="step"><div class="num">6</div><div class="label">Reporte final</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="proyectos">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Portafolio</div>
+      <h2>Proyectos</h2>
+      <p>Trabajos que hemos realizado para nuestros clientes.</p>
+    </div>
+
+    <div id="proyectos-grid" class="proyectos-grid"></div>
+
+    <div id="proyectos-vacio" class="proyectos-vacio" style="display:none;">
+      Estamos preparando nuestro portafolio — pronto encontrarás aquí los proyectos
+      en los que hemos trabajado.
+    </div>
+  </div>
+</section>
+
+<section id="cotiza">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Cotización</div>
+      <h2>Cotiza tu proyecto</h2>
+      <p>Completa el formulario y levantamos tu solicitud — te confirmamos alcance y precio por correo.</p>
+    </div>
+
+    <form class="quote" id="quoteForm">
+      <div class="field-row">
+        <div class="field">
+          <label for="nombre">Nombre</label>
+          <input type="text" id="nombre" name="nombre" required>
+        </div>
+        <div class="field">
+          <label for="correo">Correo</label>
+          <input type="email" id="correo" name="correo" required>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="telefono">Teléfono (opcional)</label>
+          <input type="tel" id="telefono" name="telefono">
+        </div>
+        <div class="field">
+          <label for="paquete">Paquete de interés</label>
+          <select id="paquete" name="paquete">
+            <option value="Ajolote Explorador">Ajolote Explorador — 1 diana, hasta 5 ligandos ($1,200)</option>
+            <option value="Ajolote Certero">Ajolote Certero — 1 diana, hasta 10 ligandos ($2,000)</option>
+            <option value="Ajolote a la Medida">Ajolote a la Medida — 1 diana, 15+ ligandos (cotización)</option>
+            <option value="Quinto Sol">Quinto Sol — 5 dianas ($2,500)</option>
+            <option value="Xochimilco">Xochimilco — 10 dianas ($3,000)</option>
+            <option value="Alebrije">Alebrije — Modelado AlphaFold2 + docking ($2,000)</option>
+            <option value="No estoy seguro">No estoy seguro / quiero asesoría</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="dianas">Número aproximado de dianas</label>
+          <input type="number" id="dianas" name="dianas" min="1">
+        </div>
+        <div class="field">
+          <label for="ligandos">Número aproximado de ligandos</label>
+          <input type="number" id="ligandos" name="ligandos" min="1">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="dm">¿Agregar validación por dinámica molecular? (opcional)</label>
+        <select id="dm" name="dm">
+          <option value="Ninguna">No, gracias</option>
+          <option value="Rebozo Corto">Sí — Rebozo Corto, 10 ns ($5,000)</option>
+          <option value="Rebozo Largo">Sí — Rebozo Largo, 20-50 ns ($10,000)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="notas">Cuéntanos sobre tu proyecto</label>
+        <textarea id="notas" name="notas" rows="4" placeholder="Objetivo del proyecto, receptores/ligandos que ya tengas identificados, fecha en que necesitas los resultados, etc."></textarea>
+      </div>
+
+      <button type="submit">Solicitar cotización</button>
+      <div class="form-note">
+        Al enviar se abrirá tu programa de correo con la solicitud ya redactada, lista para
+        mandar a <a href="mailto:fcoarmandosd@ieee.org">fcoarmandosd@ieee.org</a>.
+        Si no se abre automáticamente, escríbenos directo a ese correo.
+      </div>
+    </form>
+  </div>
+</section>
+
+<footer id="contacto">
+  <img src="./assets/logo-icono.png" alt="Axolotl Discovery">
+  <div class="tag">Docking molecular &amp; drug discovery computacional</div>
+  <div class="contact">Contacto: <a href="mailto:fcoarmandosd@ieee.org">fcoarmandosd@ieee.org</a> · GitHub: <a href="https://github.com/Axolotl-Discovery" target="_blank" rel="noopener">github.com/Axolotl-Discovery</a></div>
+  <div class="copy">© <span id="year"></span> Axolotl Discovery</div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ===================== PORTAFOLIO =====================
+  // Los proyectos se leen de assets/proyectos.json (ver README.md).
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  // Carga la librería 3Dmol.js (local, en assets/lib) solo si algún proyecto la necesita
+  var _3dmolPromise = null;
+  function cargar3Dmol() {
+    if (window.$3Dmol) return Promise.resolve(window.$3Dmol);
+    if (_3dmolPromise) return _3dmolPromise;
+    _3dmolPromise = new Promise(function(resolve, reject) {
+      var s = document.createElement('script');
+      s.src = './assets/lib/3Dmol-min.js';
+      s.onload = function() { resolve(window.$3Dmol); };
+      s.onerror = reject;
+      document.head.appendChild(s);
+    });
+    return _3dmolPromise;
+  }
+
+  // Lee los REMARK del PDB (afinidad y tipo de corrida) para mostrarlos sin tener que escribirlos en el JSON
+  function leerRemarks(pdb) {
+    var info = {};
+    var m = pdb.match(/Energia de afinidad:\s*([-−]?[\d.]+)\s*kcal\/mol/i);
+    if (m) info.afinidad = m[1].replace('-', '−');
+    var c = pdb.match(/REMARK\s+2\s+Corrida:\s*(.+)/);
+    if (c) info.corrida = c[1].trim();
+    return info;
+  }
+
+  function crearVisor(col, p) {
+    var estructuras = p.estructuras;
+    col.innerHTML =
+      '<div class="visor-wrap">' +
+        '<div class="visor-canvas"></div>' +
+        '<div class="visor-msg">Cargando visor 3D…</div>' +
+        '<div class="visor-info" style="display:none"></div>' +
+        '<div class="visor-tools">' +
+          '<button type="button" data-a="reset" title="Volver a centrar">Centrar</button>' +
+          '<button type="button" data-a="full" title="Pantalla completa">⛶</button>' +
+        '</div>' +
+        '<div class="visor-toggles">' +
+          '<button type="button" data-t="vista" class="on">Bolsillo</button>' +
+          '<button type="button" data-t="residuos" class="on">Residuos cercanos</button>' +
+          '<button type="button" data-t="etiquetas">Etiquetas</button>' +
+          '<button type="button" data-t="superficie">Superficie</button>' +
+          '<button type="button" data-t="giro">Girar</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="visor-select">' +
+        estructuras.map(function(e, i) {
+          return '<button type="button" data-i="' + i + '">' + esc(e.nombre) + '</button>';
+        }).join('') +
+      '</div>';
+
+    var wrap = col.querySelector('.visor-wrap');
+    var canvas = col.querySelector('.visor-canvas');
+    var msg = col.querySelector('.visor-msg');
+    var infoBox = col.querySelector('.visor-info');
+    var viewer = null, actual = -1, cache = {};
+    var estado = { vista: true, residuos: true, etiquetas: false, superficie: false, giro: false };
+
+    var LIG = { hetflag: true };
+    var CERCA = { within: { distance: 4.5, sel: LIG }, hetflag: false };
+    var LIG_COLOR = { prop: 'elem', map: { C: 0xAD4670, N: 0x3b6fd8, O: 0xe0453a, S: 0xe8c22e, H: 0xffffff } };
+
+    function dibujar(zoom) {
+      viewer.setStyle({}, { cartoon: { color: '#b9bec8', opacity: 0.9 } });
+      viewer.setStyle(LIG, { stick: { radius: 0.22, colorscheme: LIG_COLOR }, sphere: { scale: 0.22, colorscheme: LIG_COLOR } });
+      if (estado.residuos) {
+        viewer.addStyle(CERCA, { stick: { radius: 0.13, colorscheme: 'grayCarbon' } });
+      }
+      viewer.removeAllLabels();
+      if (estado.etiquetas) {
+        viewer.addResLabels(CERCA, { font: 'Arial', fontSize: 11, fontColor: '#ffffff',
+          backgroundColor: '#111111', backgroundOpacity: 0.65, showBackground: true });
+      }
+      viewer.removeAllSurfaces();
+      if (estado.superficie) {
+        viewer.addSurface($3Dmol.SurfaceType.VDW, { opacity: 0.55, color: '#e9d3dc' },
+          { within: { distance: 9, sel: LIG }, hetflag: false });
+      }
+      viewer.spin(estado.giro ? 'y' : false);
+      if (zoom) {
+        if (estado.vista) { viewer.zoomTo(LIG); viewer.zoom(0.8); } else viewer.zoomTo({});
+      }
+      viewer.render();
+    }
+
+    function mostrar(i) {
+      if (i === actual) return;
+      actual = i;
+      col.querySelectorAll('.visor-select button').forEach(function(b) {
+        b.classList.toggle('activo', +b.getAttribute('data-i') === i);
+      });
+      var e = estructuras[i];
+      msg.style.display = 'flex'; msg.textContent = 'Cargando ' + e.nombre + '…';
+      var p1 = cache[e.archivo] ? Promise.resolve(cache[e.archivo]) :
+        fetch(e.archivo).then(function(r) { if (!r.ok) throw new Error(r.status); return r.text(); });
+      p1.then(function(pdb) {
+        cache[e.archivo] = pdb;
+        if (actual !== i) return;
+        var rem = leerRemarks(pdb);
+        viewer.clear();
+        viewer.addModel(pdb, 'pdb');
+        dibujar(true);
+        msg.style.display = 'none';
+        var lineas = ['<b>' + esc(e.nombre) + '</b>'];
+        if (rem.corrida) lineas.push(esc(rem.corrida));
+        if (rem.afinidad) lineas.push('Afinidad (Vina): <b>' + esc(rem.afinidad) + ' kcal/mol</b>');
+        if (e.nota) lineas.push(esc(e.nota));
+        infoBox.innerHTML = lineas.join('<br>');
+        infoBox.style.display = 'block';
+      }).catch(function(err) {
+        console.error('No se pudo cargar la estructura', e.archivo, err);
+        msg.textContent = 'No se pudo cargar ' + e.nombre + '.';
+      });
+    }
+
+    // Botones
+    col.querySelector('.visor-select').addEventListener('click', function(ev) {
+      var b = ev.target.closest('button'); if (b && viewer) mostrar(+b.getAttribute('data-i'));
+    });
+    col.querySelector('.visor-toggles').addEventListener('click', function(ev) {
+      var b = ev.target.closest('button'); if (!b || !viewer) return;
+      var t = b.getAttribute('data-t');
+      estado[t] = !estado[t];
+      b.classList.toggle('on', estado[t]);
+      if (t === 'vista') b.textContent = estado.vista ? 'Bolsillo' : 'Receptor completo';
+      dibujar(t === 'vista');
+    });
+    col.querySelector('.visor-tools').addEventListener('click', function(ev) {
+      var b = ev.target.closest('button'); if (!b || !viewer) return;
+      if (b.getAttribute('data-a') === 'reset') { dibujar(true); return; }
+      if (document.fullscreenElement) document.exitFullscreen();
+      else if (wrap.requestFullscreen) wrap.requestFullscreen();
+    });
+    document.addEventListener('fullscreenchange', function() {
+      if (viewer) setTimeout(function() { viewer.resize(); viewer.render(); }, 80);
+    });
+    window.addEventListener('resize', function() { if (viewer) viewer.resize(); });
+
+    // Se inicia solo cuando el visor entra en pantalla (no carga nada si nadie baja al portafolio)
+    function iniciar() {
+      cargar3Dmol().then(function($3Dmol) {
+        viewer = $3Dmol.createViewer(canvas, { backgroundColor: '#0f1117', antialias: true });
+        mostrar(0);
+      }).catch(function() {
+        msg.textContent = 'No se pudo cargar el visor 3D.';
+      });
+    }
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting) { io.disconnect(); iniciar(); }
+      }, { rootMargin: '200px' });
+      io.observe(wrap);
+    } else { iniciar(); }
+  }
+
+  fetch('./assets/proyectos.json')
+    .then(function(r) { return r.json(); })
+    .then(function(proyectos) {
+      var grid = document.getElementById('proyectos-grid');
+      var vacio = document.getElementById('proyectos-vacio');
+      if (!proyectos || proyectos.length === 0) {
+        vacio.style.display = 'block';
+        return;
+      }
+      proyectos.forEach(function(p) {
+        var conVisor = p.estructuras && p.estructuras.length > 0;
+        var card = document.createElement('div');
+        card.className = 'proyecto-card' + (conVisor ? ' con-visor' : '');
+
+        var thumbHtml = (!conVisor && p.imagen) ? '<img class="thumb" src="' + esc(p.imagen) + '" alt="' + esc(p.titulo) + '">' : '';
+        var clienteHtml = p.cliente ? '<div class="cliente">' + esc(p.cliente) + '</div>' : '';
+        var etiquetasHtml = '';
+        if (p.etiquetas && p.etiquetas.length) {
+          etiquetasHtml = '<div class="etiquetas">' + p.etiquetas.map(function(t) {
+            return '<span class="etiqueta">' + esc(t) + '</span>';
+          }).join('') + '</div>';
+        }
+        var hintHtml = conVisor ? '<p class="visor-hint">Arrastra para rotar · rueda o pellizco para acercar · elige el complejo abajo del visor.</p>' : '';
+        var enlaceHtml = p.enlace ? '<a class="enlace" href="' + esc(p.enlace) + '" target="_blank" rel="noopener">Ver más →</a>' : '';
+
+        card.innerHTML = (conVisor ? '<div class="visor-col"></div>' : thumbHtml) +
+          '<div class="body">' +
+            '<h3>' + esc(p.titulo) + '</h3>' +
+            clienteHtml +
+            '<p class="resumen">' + esc(p.resumen) + '</p>' +
+            etiquetasHtml +
+            hintHtml +
+            enlaceHtml +
+          '</div>';
+        grid.appendChild(card);
+        if (conVisor) crearVisor(card.querySelector('.visor-col'), p);
+      });
+    })
+    .catch(function(err) {
+      console.error('No se pudo cargar el portafolio de proyectos:', err);
+      var vacio = document.getElementById('proyectos-vacio');
+      if (location.protocol === 'file:') {
+        // Abierto con doble clic: el navegador bloquea leer proyectos.json y los .pdb
+        vacio.innerHTML = '<b>Vista local:</b> el portafolio no se puede cargar abriendo el archivo directamente. ' +
+          'Cierra esta pestaña y abre <b>Ver sitio en local.bat</b> (en la carpeta del sitio). ' +
+          'En GitHub Pages esto funciona sin hacer nada.';
+      }
+      vacio.style.display = 'block';
+    });
+
+  // Botones "Elegir este paquete": preseleccionan el paquete y bajan al formulario
+  document.querySelectorAll('.choose').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var pkg = btn.getAttribute('data-pkg');
+      var select = document.getElementById('paquete');
+      for (var i = 0; i < select.options.length; i++) {
+        if (select.options[i].value === pkg) { select.selectedIndex = i; break; }
+      }
+      document.getElementById('cotiza').scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  // Botones "Agregar este complemento" (Rebozo Corto/Largo): preseleccionan el campo de DM
+  document.querySelectorAll('.choose-dm').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var dm = btn.getAttribute('data-dm');
+      var select = document.getElementById('dm');
+      for (var i = 0; i < select.options.length; i++) {
+        if (select.options[i].value === dm) { select.selectedIndex = i; break; }
+      }
+      document.getElementById('cotiza').scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  // Envío del formulario: arma un mailto con todos los datos
+  document.getElementById('quoteForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var f = e.target;
+    var nombre = f.nombre.value.trim();
+    var correo = f.correo.value.trim();
+    var telefono = f.telefono.value.trim();
+    var paquete = f.paquete.value;
+    var dm = f.dm.value;
+    var dianas = f.dianas.value.trim();
+    var ligandos = f.ligandos.value.trim();
+    var notas = f.notas.value.trim();
+
+    var subject = 'Solicitud de cotización — ' + paquete + (dm !== 'Ninguna' ? ' + ' + dm : '');
+    var bodyLines = [
+      'Nueva solicitud de cotización desde el sitio web:',
+      '',
+      'Nombre: ' + nombre,
+      'Correo: ' + correo,
+      'Teléfono: ' + (telefono || '(no proporcionado)'),
+      'Paquete de interés: ' + paquete,
+      'Validación por dinámica molecular: ' + (dm !== 'Ninguna' ? dm : 'No solicitada'),
+      'Número aproximado de dianas: ' + (dianas || '(no especificado)'),
+      'Número aproximado de ligandos: ' + (ligandos || '(no especificado)'),
+      '',
+      'Notas del proyecto:',
+      notas || '(sin notas adicionales)'
+    ];
+    var body = bodyLines.join('\n');
+    var mailto = 'mailto:fcoarmandosd@ieee.org' +
+      '?subject=' + encodeURIComponent(subject) +
+      '&body=' + encodeURIComponent(body);
+    window.location.href = mailto;
+  });
+</script>
+
+</body>
+</html>
