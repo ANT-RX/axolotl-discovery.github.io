@@ -225,6 +225,14 @@
   .visor-select button:hover { border-color: var(--rosa); color: var(--rosa); }
   .visor-select button.activo { background: var(--rosa); border-color: var(--rosa); color: #fff; }
   .visor-hint { font-size: 11.5px; color: var(--gray-400); margin: 0 0 12px 0; }
+  /* ---- Axolotl for Education ---- */
+  .edu-card .nivel { font-size: 11.5px; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .edu-card .acciones { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+  .edu-card a.abrir {
+    align-self: flex-start; background: var(--rosa); color: #fff; text-decoration: none;
+    font-size: 12.5px; font-weight: 700; padding: 8px 16px; border-radius: 6px;
+  }
+  .edu-card a.abrir:hover { background: var(--rosa-dark); }
   .proyectos-vacio {
     text-align: center; color: var(--gray-500); font-size: 14px; padding: 40px 20px;
     border: 1px dashed var(--gray-400); border-radius: 8px; max-width: 520px; margin: 0 auto;
@@ -258,6 +266,7 @@
       <a href="#primers">Primers PCR</a>
       <a href="#proceso">Cómo trabajamos</a>
       <a href="#proyectos">Proyectos</a>
+      <a href="#educacion">Educación</a>
       <a href="#contacto">Contacto</a>
     </nav>
     <a class="nav-cta" href="#cotiza">Cotizar proyecto</a>
@@ -431,6 +440,24 @@
     <div id="proyectos-vacio" class="proyectos-vacio" style="display:none;">
       Estamos preparando nuestro portafolio — pronto encontrarás aquí los proyectos
       en los que hemos trabajado.
+    </div>
+  </div>
+</section>
+
+<section id="educacion" class="alt">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Divulgación y docencia</div>
+      <h2>Axolotl for Education</h2>
+      <p>Herramientas que diseñamos para enseñar y aprender química computacional,
+        docking y biología molecular — gratuitas para estudiantes y profesores.</p>
+    </div>
+
+    <div id="educacion-grid" class="proyectos-grid"></div>
+
+    <div id="educacion-vacio" class="proyectos-vacio" style="display:none;">
+      Estamos preparando nuestras primeras herramientas educativas — muy pronto
+      las encontrarás aquí.
     </div>
   </div>
 </section>
@@ -730,6 +757,46 @@
           'En GitHub Pages esto funciona sin hacer nada.';
       }
       vacio.style.display = 'block';
+    });
+
+  // ===================== AXOLOTL FOR EDUCATION =====================
+  // Las herramientas educativas se leen de assets/educacion.json (ver README.md).
+  fetch('./assets/educacion.json')
+    .then(function(r) { return r.json(); })
+    .then(function(herramientas) {
+      var grid = document.getElementById('educacion-grid');
+      var vacio = document.getElementById('educacion-vacio');
+      if (!herramientas || herramientas.length === 0) {
+        vacio.style.display = 'block';
+        return;
+      }
+      herramientas.forEach(function(h) {
+        var card = document.createElement('div');
+        card.className = 'proyecto-card edu-card';
+        var thumbHtml = h.imagen ? '<img class="thumb" src="' + esc(h.imagen) + '" alt="' + esc(h.titulo) + '">' : '';
+        var nivelHtml = h.nivel ? '<div class="nivel">' + esc(h.nivel) + '</div>' : '';
+        var etiquetasHtml = '';
+        if (h.etiquetas && h.etiquetas.length) {
+          etiquetasHtml = '<div class="etiquetas">' + h.etiquetas.map(function(t) {
+            return '<span class="etiqueta">' + esc(t) + '</span>';
+          }).join('') + '</div>';
+        }
+        var abrirHtml = h.enlace ? '<a class="abrir" href="' + esc(h.enlace) + '" target="_blank" rel="noopener">Abrir herramienta →</a>' : '';
+        var codigoHtml = h.codigo ? '<a class="enlace" href="' + esc(h.codigo) + '" target="_blank" rel="noopener">Código fuente</a>' : '';
+        card.innerHTML = thumbHtml +
+          '<div class="body">' +
+            '<h3>' + esc(h.titulo) + '</h3>' +
+            nivelHtml +
+            '<p class="resumen">' + esc(h.descripcion) + '</p>' +
+            etiquetasHtml +
+            '<div class="acciones">' + abrirHtml + codigoHtml + '</div>' +
+          '</div>';
+        grid.appendChild(card);
+      });
+    })
+    .catch(function(err) {
+      console.error('No se pudieron cargar las herramientas educativas:', err);
+      document.getElementById('educacion-vacio').style.display = 'block';
     });
 
   // Botones "Elegir este paquete": preseleccionan el paquete y bajan al formulario

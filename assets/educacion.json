@@ -1,0 +1,14 @@
+[
+  {
+    "titulo": "Axolotl Docking",
+    "nivel": "Licenciatura · Posgrado",
+    "descripcion": "App de terminal para hacer docking molecular de principio a fin con un solo comando. Le das las proteínas (PDB, UniProt o archivo) y los ligandos (nombre, CID de PubChem o SMILES), y ella descarga las estructuras, limpia los receptores, calcula la caja, valida por redocking, corre smina con varias semillas y arma la tabla de afinidades y el análisis de interacciones. Tiene modo básico (todo automático) y avanzado, y soporta metales poco comunes como el vanadio con AutoDock4.",
+    "etiquetas": [
+      "Docking",
+      "smina / AutoDock4",
+      "WSL · Linux",
+      "Código en GitHub"
+    ],
+    "enlace": "https://github.com/Axolotl-Discovery/axolotl-docking"
+  }
+]
