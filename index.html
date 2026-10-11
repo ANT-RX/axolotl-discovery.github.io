@@ -5,487 +5,733 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Axolotl Discovery — Docking Molecular &amp; Drug Discovery</title>
 <meta name="description" content="Servicios de docking molecular y drug discovery computacional: cribado virtual, modelado de receptores y análisis de interacciones proteína-ligando.">
+<meta name="theme-color" content="#000000">
 <link rel="icon" type="image/png" href="./assets/logo-icono.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --rosa: #AD4670;
     --rosa-dark: #8f3a5c;
-    --ink: #111111;
-    --gray-700: #374151;
-    --gray-500: #6b7280;
-    --gray-400: #9ca3af;
-    --gray-200: #e5e7eb;
-    --gray-100: #f5f5f5;
+    --rosa-claro: #f2a7c6;
+    --ink: #1d1d1f;
+    --gray-700: #424245;
+    --gray-500: #6e6e73;
+    --gray-400: #86868b;
+    --gray-200: #d2d2d7;
+    --gray-100: #f5f5f7;
     --bg: #ffffff;
+    --negro: #000000;
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   }
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; scroll-padding-top: 52px; }
   body {
-    margin: 0;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    color: var(--ink);
-    background: var(--bg);
-    line-height: 1.5;
+    margin: 0; font-family: var(--font); color: var(--ink); background: var(--bg);
+    line-height: 1.47; font-size: 17px; letter-spacing: -0.011em;
+    -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
   }
   a { color: inherit; }
   img { max-width: 100%; display: block; }
   .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  :focus-visible { outline: 2px solid var(--rosa); outline-offset: 3px; border-radius: 4px; }
 
-  /* ---- Nav ---- */
+  /* ---- Tipografía ---- */
+  .titulo-xl { font-size: clamp(44px, 7.4vw, 88px); line-height: 1.04; font-weight: 700; letter-spacing: -0.035em; margin: 0; }
+  .titulo-l  { font-size: clamp(36px, 5.2vw, 60px); line-height: 1.06; font-weight: 700; letter-spacing: -0.03em; margin: 0; }
+  .titulo-m  { font-size: clamp(28px, 3.4vw, 40px); line-height: 1.1;  font-weight: 700; letter-spacing: -0.025em; margin: 0; }
+  .sub { font-size: clamp(19px, 2vw, 24px); line-height: 1.35; font-weight: 500; letter-spacing: -0.015em; color: var(--gray-500); margin: 18px 0 0 0; }
+  .oscuro .sub { color: var(--gray-400); }
+  .cabeza { text-align: center; max-width: 760px; margin: 0 auto 64px auto; }
+
+  /* ---- Botones y enlaces ---- */
+  .btn {
+    display: inline-block; font: inherit; font-size: 17px; font-weight: 500; text-decoration: none;
+    padding: 12px 24px; border-radius: 980px; border: none; cursor: pointer; transition: background .2s;
+  }
+  .btn-primary { background: var(--rosa); color: #fff; }
+  .btn-primary:hover { background: var(--rosa-dark); }
+  .btn-secundario { background: transparent; color: var(--rosa); box-shadow: inset 0 0 0 1px var(--rosa); }
+  .btn-secundario:hover { background: var(--rosa); color: #fff; }
+  .oscuro .btn-secundario { color: var(--rosa-claro); box-shadow: inset 0 0 0 1px var(--rosa-claro); }
+  .oscuro .btn-secundario:hover { background: var(--rosa-claro); color: #000; }
+  .link { color: var(--rosa); text-decoration: none; font-weight: 500; }
+  .link:hover { text-decoration: underline; }
+  .oscuro .link { color: var(--rosa-claro); }
+  .acciones-centro { display: flex; gap: 14px 28px; justify-content: center; align-items: center; flex-wrap: wrap; margin-top: 32px; }
+
+  /* ---- Nav translúcida ---- */
   header.nav {
-    position: sticky; top: 0; z-index: 50;
-    background: rgba(255,255,255,0.94);
-    backdrop-filter: blur(6px);
-    border-bottom: 1px solid var(--gray-200);
+    position: sticky; top: 0; z-index: 100; height: 52px;
+    background: rgba(255,255,255,0.72);
+    -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
   }
-  header.nav .wrap {
-    display: flex; align-items: center; justify-content: space-between;
-    padding-top: 14px; padding-bottom: 14px;
-  }
-  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-  .brand img { height: 34px; }
-  .brand span { font-weight: 700; font-size: 15px; letter-spacing: 0.5px; }
-  nav.links { display: flex; gap: 28px; }
-  nav.links a {
-    text-decoration: none; font-size: 13.5px; font-weight: 600;
-    color: var(--gray-700); letter-spacing: 0.2px;
-  }
-  nav.links a:hover { color: var(--rosa); }
-  .nav-cta {
-    background: var(--rosa); color: #fff !important; padding: 9px 18px;
-    border-radius: 30px; font-size: 13px; font-weight: 700; text-decoration: none;
-    white-space: nowrap;
-  }
+  header.nav .wrap { height: 52px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+  .brand { display: flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 600; font-size: 15px; letter-spacing: -0.01em; }
+  .brand img { width: 30px; height: 30px; mix-blend-mode: multiply; }
+  nav.links { display: flex; gap: 26px; }
+  nav.links a { font-size: 13px; text-decoration: none; color: var(--gray-700); transition: color .2s; white-space: nowrap; }
+  .brand span, .nav-cta { white-space: nowrap; }
+  nav.links a:hover { color: var(--ink); }
+  .nav-cta { font-size: 13px; font-weight: 500; text-decoration: none; background: var(--rosa); color: #fff; padding: 6px 14px; border-radius: 980px; }
   .nav-cta:hover { background: var(--rosa-dark); }
+  .menu-btn { display: none; background: none; border: none; padding: 8px; cursor: pointer; }
+  .menu-btn span { display: block; width: 18px; height: 1.5px; background: var(--ink); margin: 4px 0; transition: transform .25s, opacity .25s; }
 
   /* ---- Hero ---- */
-  .hero {
-    padding: 84px 0 70px 0;
-    text-align: center;
-    border-bottom: 1px solid var(--gray-200);
+  .hero { background: var(--negro); color: #fff; padding: 88px 0 0 0; text-align: center; overflow: hidden; }
+  .hero .logo { width: 84px; height: 84px; margin: 0 auto 22px auto; filter: invert(1); mix-blend-mode: screen; }
+  .hero .titulo-xl { max-width: 900px; margin: 0 auto; }
+  .hero .sub { max-width: 640px; margin-left: auto; margin-right: auto; }
+  .hero-visor { position: relative; height: min(64vw, 600px); min-height: 360px; margin-top: 24px; cursor: grab; }
+  .hero-visor:active { cursor: grabbing; }
+  .hero-visor .canvas3d { position: absolute; inset: 0; }
+  .hero-visor::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 120px; pointer-events: none;
+    background: linear-gradient(to bottom, rgba(0,0,0,0), #000);
   }
-  .hero img.icon { height: 150px; margin: 0 auto 26px auto; }
-  .hero h1 {
-    font-size: 34px; font-weight: 700; margin: 0 0 16px 0; line-height: 1.2;
-  }
-  .hero h1 em { color: var(--rosa); font-style: normal; }
-  .hero p.lead {
-    max-width: 560px; margin: 0 auto 32px auto; color: var(--gray-500); font-size: 16px;
-  }
-  .hero .cta-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
-  .btn {
-    display: inline-block; padding: 13px 28px; border-radius: 30px;
-    font-size: 14px; font-weight: 700; text-decoration: none; border: 1.5px solid var(--ink);
-  }
-  .btn-primary { background: var(--rosa); border-color: var(--rosa); color: #fff; }
-  .btn-primary:hover { background: var(--rosa-dark); border-color: var(--rosa-dark); }
-  .btn-outline { background: transparent; color: var(--ink); }
-  .btn-outline:hover { background: var(--gray-100); }
+  .hero-pie { color: var(--gray-400); font-size: 14px; padding: 0 24px 72px 24px; max-width: 620px; margin: -40px auto 0 auto; position: relative; z-index: 2; }
+  .hero-pie b { color: #fff; font-weight: 600; }
+  .hero .entra { opacity: 0; transform: translateY(18px); animation: entra 1s cubic-bezier(.2,.7,.2,1) forwards; }
+  .hero .entra.d1 { animation-delay: .1s; } .hero .entra.d2 { animation-delay: .25s; } .hero .entra.d3 { animation-delay: .4s; }
+  .hero .entra.d4 { animation-delay: .6s; animation-duration: 1.6s; }
+  @keyframes entra { to { opacity: 1; transform: none; } }
 
-  .badges { display: flex; gap: 16px; justify-content: center; margin-top: 46px; flex-wrap: wrap; }
-  .badge {
-    border: 1px solid var(--gray-200); border-radius: 6px; padding: 14px 20px; min-width: 150px;
-  }
-  .badge .n { display: block; font-weight: 700; font-size: 14px; color: var(--rosa); }
-  .badge .l { display: block; font-size: 10.5px; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.8px; margin-top: 4px; }
+  /* ---- Secciones ---- */
+  section { padding: 120px 0; }
+  section.gris { background: var(--gray-100); }
+  section.oscuro { background: var(--negro); color: #fff; }
 
-  /* ---- Sections generic ---- */
-  section { padding: 72px 0; }
-  section.alt { background: var(--gray-100); }
-  .section-head { text-align: center; max-width: 620px; margin: 0 auto 44px auto; }
-  .section-head .kicker { color: var(--rosa); font-weight: 700; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; }
-  .section-head h2 { font-size: 26px; margin: 8px 0 10px 0; }
-  .section-head p { color: var(--gray-500); font-size: 14.5px; margin: 0; }
+  /* Lo que incluye */
+  .incluye { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; }
+  .incluye h3 { font-size: 21px; font-weight: 600; letter-spacing: -0.02em; margin: 0 0 8px 0; }
+  .incluye p { font-size: 15px; color: var(--gray-500); margin: 0; }
+  .incluye .cifra { font-size: 48px; font-weight: 700; letter-spacing: -0.04em; line-height: 1; margin-bottom: 14px; color: var(--rosa); }
 
-  .includes {
-    background: #fff; border: 1px solid var(--gray-200); border-left: 4px solid var(--rosa);
-    border-radius: 6px; padding: 20px 26px; font-size: 14px; line-height: 1.6; color: var(--gray-700);
-    max-width: 820px; margin: 0 auto 48px auto;
-  }
-  .includes b { color: var(--ink); }
+  /* Comparador de paquetes */
+  .grupo { margin-top: 72px; }
+  .grupo:first-of-type { margin-top: 0; }
+  .grupo > h3 { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0 0 6px 0; text-align: center; }
+  .grupo > p { text-align: center; color: var(--gray-500); margin: 0 0 32px 0; font-size: 16px; }
+  .comparador { display: grid; grid-template-columns: repeat(3, 1fr); background: #fff; border-radius: 28px; overflow: hidden; }
+  .comparador.dos { grid-template-columns: repeat(2, 1fr); }
+  .comparador.uno { grid-template-columns: 1fr; }
+  .modelo { padding: 48px 32px 44px 32px; text-align: center; display: flex; flex-direction: column; align-items: center; position: relative; }
+  .modelo + .modelo::before { content: ''; position: absolute; left: 0; top: 48px; bottom: 48px; width: 1px; background: var(--gray-200); }
+  .modelo h4 { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+  .modelo .alcance { font-size: 15px; color: var(--gray-500); margin: 8px 0 26px 0; min-height: 44px; max-width: 300px; }
+  .modelo .precio { font-size: 44px; font-weight: 700; letter-spacing: -0.04em; line-height: 1; }
+  .modelo .precio small { font-size: 15px; font-weight: 500; letter-spacing: 0; color: var(--gray-500); margin-left: 4px; }
+  .modelo .precio.texto { font-size: 30px; letter-spacing: -0.03em; padding: 7px 0; }
+  .modelo .nota { font-size: 13px; color: var(--gray-400); margin: 12px 0 28px 0; flex-grow: 1; }
+  .modelo .btn { font-size: 15px; padding: 9px 20px; }
 
-  /* ---- Servicios grid ---- */
-  .svc-grid {
-    display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px;
-  }
-  .svc-card {
-    border: 1px solid var(--gray-200); border-left: 4px solid var(--rosa); border-radius: 8px;
-    padding: 22px 24px; background: #fff; display: flex; flex-direction: column;
-  }
-  .svc-card .top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
-  .svc-card h3 { font-size: 17px; margin: 0; }
-  .svc-card .price { font-size: 17px; font-weight: 700; color: var(--rosa); white-space: nowrap; }
-  .svc-card p.scope { font-size: 13.5px; color: var(--gray-700); margin: 8px 0 6px 0; line-height: 1.5; flex-grow: 1; }
-  .svc-card .tag { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--gray-400); margin-bottom: 14px; }
-  .svc-card button.choose, .svc-card button.choose-dm {
-    align-self: flex-start; background: none; border: 1.5px solid var(--ink); color: var(--ink);
-    padding: 8px 18px; border-radius: 24px; font-size: 12.5px; font-weight: 700; cursor: pointer;
-  }
-  .svc-card button.choose:hover, .svc-card button.choose-dm:hover { background: var(--ink); color: #fff; }
+  /* Dinámica molecular */
+  .dm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .dm { background: #161617; border-radius: 28px; padding: 56px 40px 48px 40px; text-align: center; display: flex; flex-direction: column; align-items: center; }
+  .dm .ns { font-size: clamp(64px, 9vw, 112px); font-weight: 700; letter-spacing: -0.05em; line-height: 1; color: #fff; }
+  .dm .ns small { font-size: .32em; letter-spacing: -0.02em; color: var(--gray-400); margin-left: 6px; font-weight: 600; }
+  .dm h3 { font-size: 24px; font-weight: 600; margin: 20px 0 6px 0; letter-spacing: -0.02em; }
+  .dm p { color: var(--gray-400); font-size: 15px; margin: 0 0 6px 0; }
+  .dm .precio { font-size: 21px; font-weight: 600; color: #fff; margin: 14px 0 26px 0; }
+  .dm .btn { font-size: 15px; padding: 9px 20px; }
+  .aviso-oscuro { text-align: center; color: var(--gray-400); font-size: 14px; max-width: 620px; margin: 36px auto 0 auto; }
 
-  /* ---- Proceso ---- */
-  .steps {
-    display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; text-align: center;
+  /* Metales */
+  .metales { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
+  .metales .titulo-l { margin-bottom: 18px; }
+  .metales p.desc { font-size: 19px; color: var(--gray-400); margin: 0 0 22px 0; letter-spacing: -0.015em; }
+  .metales ul { list-style: none; padding: 0; margin: 0 0 30px 0; }
+  .metales li { font-size: 15px; color: #d2d2d7; padding: 12px 0; border-top: 1px solid #2a2a2d; }
+  .metales li:last-child { border-bottom: 1px solid #2a2a2d; }
+  .metales .aviso { font-size: 13px; color: var(--gray-400); margin: 0 0 28px 0; }
+  .tabla { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .tabla-pie { grid-column: 1 / -1; text-align: center; font-size: 13px; color: var(--gray-400); margin-top: 4px; }
+  /* Casilla de tabla periódica */
+  .elemento {
+    position: relative; overflow: hidden; aspect-ratio: 1; border-radius: 14px; cursor: pointer;
+    background: #161617; border: 1px solid #333336; color: #fff; font-family: inherit; text-align: left;
+    padding: 16px 18px; display: grid; grid-template-rows: auto 1fr auto auto auto;
+    transition: background .4s, border-color .4s, transform .2s;
   }
-  .step .num {
-    width: 34px; height: 34px; border-radius: 50%; background: var(--rosa); color: #fff;
-    display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;
-    margin: 0 auto 10px auto;
-  }
-  .step .label { font-size: 11.5px; color: var(--gray-700); line-height: 1.4; }
+  .elemento:hover { border-color: #5a5a5f; }
+  .elemento:active { transform: scale(0.98); }
+  .elemento > span { position: relative; z-index: 1; }
+  .elemento .arriba { display: flex; justify-content: space-between; align-items: flex-start; }
+  .elemento .z { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; line-height: 1; }
+  .elemento .ox { font-size: 11px; line-height: 1.25; text-align: right; color: var(--gray-400); font-variant-numeric: tabular-nums; }
+  .elemento .ox b { color: #fff; font-weight: 600; }
+  .elemento .sim { align-self: center; justify-self: center; font-size: clamp(56px, 7vw, 92px); font-weight: 700; letter-spacing: -0.04em; line-height: 1; }
+  .elemento .nom { font-size: 15px; font-weight: 600; text-align: center; }
+  .elemento .masa { font-size: 12px; color: var(--gray-400); text-align: center; font-variant-numeric: tabular-nums; margin-top: 1px; }
+  .elemento .conf { font-size: 11px; color: var(--gray-400); text-align: center; margin-top: 4px; }
+  .elemento.activo { background: var(--rosa); border-color: var(--rosa); }
+  .elemento.activo .ox, .elemento.activo .masa, .elemento.activo .conf { color: #fbe3ec; }
+  .elemento.activo .nom, .elemento.activo .masa, .elemento.activo .conf, .elemento.activo .ox { text-shadow: 0 0 6px var(--rosa), 0 0 12px var(--rosa); }
+  /* Átomo animado de fondo */
+  .elemento .atomo { position: absolute; top: -7%; bottom: 7%; left: 0; right: 0; z-index: 0; opacity: 0; transform: scale(0.85); transition: opacity .6s, transform .8s cubic-bezier(.2,.7,.2,1); pointer-events: none; }
+  .elemento .atomo svg { width: 100%; height: 100%; display: block; }
+  .elemento.activo .atomo { opacity: 0.5; transform: scale(1); }
+  .orbita { transform-origin: 100px 100px; animation: gira linear infinite; animation-play-state: paused; }
+  .orbita.inv { animation-direction: reverse; }
+  .elemento.activo .orbita { animation-play-state: running; }
+  @keyframes gira { to { transform: rotate(360deg); } }
 
-  /* ---- Cotiza / form ---- */
-  form.quote {
-    max-width: 640px; margin: 0 auto; background: #fff; border: 1px solid var(--gray-200);
-    border-radius: 10px; padding: 34px 36px;
-  }
-  .field { margin-bottom: 18px; }
-  .field label { display: block; font-size: 12.5px; font-weight: 700; margin-bottom: 6px; color: var(--gray-700); }
-  .field input, .field select, .field textarea {
-    width: 100%; padding: 11px 13px; border: 1px solid var(--gray-200); border-radius: 6px;
-    font-size: 14px; font-family: inherit; color: var(--ink); background: #fff;
-  }
-  .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--rosa); }
-  .field-row { display: flex; gap: 16px; }
-  .field-row .field { flex: 1; }
-  form.quote button[type="submit"] {
-    width: 100%; padding: 14px; background: var(--rosa); color: #fff; border: none;
-    border-radius: 30px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 6px;
-  }
-  form.quote button[type="submit"]:hover { background: var(--rosa-dark); }
-  .form-note { font-size: 12px; color: var(--gray-500); text-align: center; margin-top: 14px; line-height: 1.5; }
-  .form-note a { color: var(--rosa); font-weight: 600; text-decoration: none; }
+  /* Complementos */
+  .comparador .modelo .herramienta { font-size: 13px; color: var(--gray-400); margin: -14px 0 22px 0; }
+  .dm.ancho { grid-column: 1 / -1; flex-direction: row; text-align: left; gap: 48px; align-items: center; padding: 48px 56px; }
+  .dm.ancho .ns { flex-shrink: 0; }
+  .dm.ancho h3 { margin-top: 0; }
+  .dm.ancho .precio { margin: 14px 0 22px 0; }
 
-  /* ---- Footer ---- */
-  footer {
-    border-top: 1px solid var(--gray-200); padding: 40px 0; text-align: center;
-  }
-  footer img { height: 30px; margin: 0 auto 12px auto; }
-  footer .tag { font-size: 11px; color: var(--gray-400); letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 6px; }
-  footer .contact { font-size: 13px; color: var(--gray-700); }
-  footer .contact a { color: var(--rosa); font-weight: 600; text-decoration: none; }
-  footer .copy { font-size: 11px; color: var(--gray-400); margin-top: 14px; }
+  /* Talleres */
+  .taller { margin-top: 20px; background: #fff; border-radius: 28px; padding: 44px 48px; display: flex; gap: 40px; align-items: center; justify-content: space-between; }
+  .taller h3 { font-size: 28px; font-weight: 700; letter-spacing: -0.025em; margin: 0 0 8px 0; }
+  .taller p { margin: 0; color: var(--gray-500); font-size: 16px; max-width: 600px; }
+  .taller .btn { flex-shrink: 0; }
 
-  .proyectos-grid {
-    display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px;
+  /* Primers */
+  .primers { display: grid; grid-template-columns: 1fr 1.1fr; gap: 72px; align-items: center; }
+  .primers .titulo-l { margin-bottom: 18px; }
+  .primers p.desc { font-size: 19px; color: var(--gray-500); margin: 0 0 24px 0; letter-spacing: -0.015em; }
+  .primers .regalo { font-size: 15px; color: var(--gray-700); padding: 16px 20px; background: #fff; border-radius: 16px; margin: 0 0 28px 0; }
+  .primers .regalo b { color: var(--rosa); }
+  .secuencia {
+    background: #fff; border-radius: 28px; padding: 40px 36px; font-family: 'SFMono-Regular', ui-monospace, Menlo, Consolas, monospace;
+    font-size: 15px; line-height: 2.1; color: #b0b0b5; word-break: break-all; letter-spacing: 0.08em;
   }
-  .proyecto-card {
-    background: #fff; border: 1px solid var(--gray-200); border-radius: 8px;
-    overflow: hidden; display: flex; flex-direction: column;
-  }
-  .proyecto-card img.thumb {
-    width: 100%; height: 160px; object-fit: cover; background: var(--gray-100);
-  }
-  .proyecto-card .body { padding: 20px 22px; display: flex; flex-direction: column; flex-grow: 1; }
-  .proyecto-card h3 { font-size: 16px; margin: 0 0 4px 0; }
-  .proyecto-card .cliente { font-size: 11.5px; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
-  .proyecto-card p.resumen { font-size: 13.5px; color: var(--gray-700); line-height: 1.5; flex-grow: 1; margin: 0 0 12px 0; }
-  .proyecto-card .etiquetas { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
-  .proyecto-card .etiqueta {
-    font-size: 10.5px; font-weight: 700; color: var(--rosa); background: #fdf1f5;
-    padding: 4px 10px; border-radius: 20px;
-  }
-  .proyecto-card a.enlace { font-size: 12.5px; font-weight: 700; color: var(--ink); text-decoration: none; }
-  .proyecto-card a.enlace:hover { color: var(--rosa); }
-  /* ---- Visor 3D de estructuras (portafolio) ---- */
+  .secuencia .fw, .secuencia .rv { color: #fff; border-radius: 6px; padding: 3px 2px; }
+  .secuencia .fw { background: var(--rosa); }
+  .secuencia .rv { background: var(--ink); }
+  .secuencia .leyenda, .secuencia .datos { word-break: normal; }
+  .secuencia .leyenda { font-family: var(--font); letter-spacing: -0.01em; font-size: 13px; color: var(--gray-500); margin-top: 22px; line-height: 1.6; display: flex; gap: 22px; flex-wrap: wrap; }
+  .secuencia .leyenda i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 7px; vertical-align: -1px; }
+  .secuencia .datos { font-family: var(--font); letter-spacing: -0.01em; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--gray-200); }
+  .secuencia .datos div { color: var(--gray-500); font-size: 12px; line-height: 1.4; }
+  .secuencia .datos b { display: block; color: var(--ink); font-size: 22px; font-weight: 600; letter-spacing: -0.02em; }
+
+  /* Proceso (secuencia real de pasos) */
+  .pasos { display: grid; grid-template-columns: repeat(6, 1fr); position: relative; }
+  .pasos::before { content: ''; position: absolute; top: 21px; left: 8.33%; right: 8.33%; height: 1px; background: var(--gray-200); }
+  .paso { text-align: center; padding: 0 10px; position: relative; }
+  .paso .num { width: 42px; height: 42px; border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 1px var(--gray-200); color: var(--ink); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 15px; margin: 0 auto 16px auto; position: relative; }
+  .paso:last-child .num { background: var(--rosa); color: #fff; box-shadow: none; }
+  .paso .label { font-size: 15px; font-weight: 500; letter-spacing: -0.01em; }
+  .paso .det { font-size: 13px; color: var(--gray-500); margin-top: 4px; }
+
+  /* ---- Proyectos ---- */
+  .proyectos-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .proyecto-card { background: #fff; border-radius: 28px; overflow: hidden; display: flex; flex-direction: column; }
+  section.oscuro .proyecto-card { background: #161617; color: #fff; }
+  .proyecto-card img.thumb { width: 100%; height: 200px; object-fit: cover; background: var(--gray-100); }
+  .proyecto-card .body { padding: 36px 36px 36px 36px; display: flex; flex-direction: column; flex-grow: 1; }
+  .proyecto-card h3 { font-size: 28px; line-height: 1.12; font-weight: 700; letter-spacing: -0.025em; margin: 0 0 8px 0; }
+  .proyecto-card .cliente, .edu-card .nivel { font-size: 14px; color: var(--gray-500); margin-bottom: 14px; }
+  section.oscuro .proyecto-card .cliente { color: var(--gray-400); }
+  .proyecto-card p.resumen { font-size: 16px; color: var(--gray-500); line-height: 1.5; flex-grow: 1; margin: 0 0 20px 0; }
+  section.oscuro .proyecto-card p.resumen { color: #a1a1a6; }
+  .proyecto-card .etiquetas { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+  .proyecto-card .etiqueta { font-size: 12px; font-weight: 500; color: var(--gray-700); background: var(--gray-100); padding: 5px 12px; border-radius: 980px; }
+  section.oscuro .proyecto-card .etiqueta { color: #d2d2d7; background: #2a2a2d; }
+  .proyecto-card a.enlace { font-size: 16px; font-weight: 500; color: var(--rosa); text-decoration: none; }
+  section.oscuro .proyecto-card a.enlace { color: var(--rosa-claro); }
+  .proyecto-card a.enlace:hover { text-decoration: underline; }
+  .edu-card .acciones { display: flex; flex-wrap: wrap; align-items: center; gap: 22px; }
+  .edu-card a.abrir { background: var(--rosa); color: #fff; text-decoration: none; font-size: 15px; font-weight: 500; padding: 9px 20px; border-radius: 980px; }
+  .edu-card a.abrir:hover { background: var(--rosa-dark); }
+
+  /* Visor 3D del portafolio */
   .proyecto-card.con-visor { grid-column: 1 / -1; flex-direction: row; }
-  .proyecto-card.con-visor .visor-col { flex: 1.35; min-width: 0; border-right: 1px solid var(--gray-200); display: flex; flex-direction: column; }
-  .proyecto-card.con-visor .body { flex: 1; }
-  .visor-wrap { position: relative; height: 380px; background: #0f1117; }
+  .proyecto-card.con-visor .visor-col { flex: 1.45; min-width: 0; display: flex; flex-direction: column; }
+  .proyecto-card.con-visor .body { flex: 1; padding: 44px 40px; }
+  .visor-wrap { position: relative; height: 460px; background: #000; }
   .visor-wrap:fullscreen { height: 100vh; }
   .visor-canvas { position: absolute; inset: 0; }
-  .visor-msg {
-    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-    color: #9ca3af; font-size: 13px; text-align: center; padding: 20px; pointer-events: none;
-  }
+  .visor-msg { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--gray-400); font-size: 14px; text-align: center; padding: 20px; pointer-events: none; }
   .visor-info {
-    position: absolute; left: 12px; top: 12px; z-index: 5; pointer-events: none;
-    background: rgba(15,17,23,0.78); color: #fff; border-radius: 6px; padding: 8px 12px;
-    font-size: 12px; line-height: 1.45; max-width: 70%;
+    position: absolute; left: 16px; top: 16px; z-index: 5; pointer-events: none;
+    background: rgba(29,29,31,0.72); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+    color: #fff; border-radius: 14px; padding: 10px 14px; font-size: 13px; line-height: 1.5; max-width: 70%;
   }
-  .visor-info b { color: #f3a6c4; }
-  .visor-tools { position: absolute; right: 10px; top: 10px; z-index: 5; display: flex; gap: 6px; }
+  .visor-info b { color: var(--rosa-claro); font-weight: 600; }
+  .visor-tools { position: absolute; right: 14px; top: 14px; z-index: 5; display: flex; gap: 6px; }
   .visor-tools button, .visor-toggles button {
-    background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.25);
-    border-radius: 16px; padding: 5px 11px; font-size: 11.5px; font-weight: 600; cursor: pointer;
-    font-family: inherit;
+    background: rgba(255,255,255,0.12); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+    color: #fff; border: none; border-radius: 980px; padding: 6px 13px; font-size: 12px; font-weight: 500; cursor: pointer; font-family: inherit;
   }
-  .visor-tools button:hover, .visor-toggles button:hover { background: rgba(255,255,255,0.25); }
-  .visor-toggles {
-    position: absolute; left: 10px; bottom: 10px; right: 10px; z-index: 5;
-    display: flex; flex-wrap: wrap; gap: 6px;
-  }
-  .visor-toggles button.on { background: var(--rosa); border-color: var(--rosa); }
-  .visor-select { padding: 12px 14px; display: flex; flex-wrap: wrap; gap: 6px; background: #fff; }
-  .visor-select button {
-    background: #fff; border: 1px solid var(--gray-200); color: var(--gray-700);
-    border-radius: 20px; padding: 6px 12px; font-size: 12px; font-weight: 600; cursor: pointer;
-    font-family: inherit;
-  }
-  .visor-select button:hover { border-color: var(--rosa); color: var(--rosa); }
-  .visor-select button.activo { background: var(--rosa); border-color: var(--rosa); color: #fff; }
-  .visor-hint { font-size: 11.5px; color: var(--gray-400); margin: 0 0 12px 0; }
-  /* ---- Axolotl for Education ---- */
-  .edu-card .nivel { font-size: 11.5px; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
-  .edu-card .acciones { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
-  .edu-card a.abrir {
-    align-self: flex-start; background: var(--rosa); color: #fff; text-decoration: none;
-    font-size: 12.5px; font-weight: 700; padding: 8px 16px; border-radius: 6px;
-  }
-  .edu-card a.abrir:hover { background: var(--rosa-dark); }
-  .proyectos-vacio {
-    text-align: center; color: var(--gray-500); font-size: 14px; padding: 40px 20px;
-    border: 1px dashed var(--gray-400); border-radius: 8px; max-width: 520px; margin: 0 auto;
-  }
+  .visor-tools button:hover, .visor-toggles button:hover { background: rgba(255,255,255,0.24); }
+  .visor-toggles { position: absolute; left: 14px; bottom: 14px; right: 14px; z-index: 5; display: flex; flex-wrap: wrap; gap: 6px; }
+  .visor-toggles button.on { background: var(--rosa); }
+  .visor-select { padding: 16px 18px; display: flex; flex-wrap: wrap; gap: 8px; background: #1d1d1f; }
+  .visor-select button { background: transparent; border: none; box-shadow: inset 0 0 0 1px #424245; color: #d2d2d7; border-radius: 980px; padding: 7px 14px; font-size: 13px; font-weight: 500; cursor: pointer; font-family: inherit; }
+  .visor-select button:hover { box-shadow: inset 0 0 0 1px var(--rosa-claro); color: #fff; }
+  .visor-select button.activo { background: #fff; box-shadow: none; color: #000; }
+  .visor-hint { font-size: 13px; color: var(--gray-400); margin: 0 0 18px 0; }
+  .proyectos-vacio { text-align: center; color: var(--gray-500); font-size: 16px; padding: 48px 24px; border-radius: 28px; background: #fff; max-width: 560px; margin: 0 auto; }
+  section.oscuro .proyectos-vacio { background: #161617; color: var(--gray-400); }
 
+  /* ---- Cotiza ---- */
+  form.quote { max-width: 680px; margin: 0 auto; }
+  .field-row { display: flex; gap: 16px; }
+  .field-row .field { flex: 1; }
+  .field { margin-bottom: 18px; }
+  .field label { display: block; font-size: 14px; font-weight: 500; margin: 0 0 8px 4px; color: var(--gray-700); }
+  .field input, .field select, .field textarea {
+    width: 100%; padding: 15px 16px; border: 1px solid var(--gray-200); border-radius: 12px; font-size: 17px;
+    font-family: inherit; color: var(--ink); background: #fff; transition: border-color .2s, box-shadow .2s; -webkit-appearance: none; appearance: none;
+  }
+  .field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236e6e73' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 16px center; padding-right: 40px;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--rosa); box-shadow: 0 0 0 4px rgba(173,70,112,0.15); }
+  form.quote button[type="submit"] { width: 100%; padding: 17px; margin-top: 10px; font-size: 17px; }
+  .form-note { font-size: 13px; color: var(--gray-500); text-align: center; margin-top: 18px; line-height: 1.55; }
+  .form-note a { color: var(--rosa); text-decoration: none; }
+
+  /* ---- Footer ---- */
+  footer { background: var(--gray-100); padding: 40px 0 32px 0; font-size: 12px; color: var(--gray-500); }
+  footer .fila { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+  footer .marca { display: flex; align-items: center; gap: 10px; color: var(--ink); font-weight: 600; font-size: 14px; }
+  footer .marca img { width: 32px; height: 32px; mix-blend-mode: multiply; }
+  footer a { color: var(--gray-700); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  footer .legal { border-top: 1px solid var(--gray-200); margin-top: 22px; padding-top: 18px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 1000px) {
+    nav.links {
+      display: none; position: absolute; top: 52px; left: 0; right: 0; flex-direction: column; gap: 0;
+      background: #fff; box-shadow: 0 24px 40px rgba(0,0,0,0.08);
+      padding: 8px 24px 20px 24px; border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+    nav.links a { font-size: 20px; font-weight: 600; color: var(--ink); padding: 12px 0; }
+    header.nav.abierto nav.links { display: flex; }
+    header.nav.abierto .menu-btn span:first-child { transform: translateY(2.75px) rotate(45deg); }
+    header.nav.abierto .menu-btn span:last-child { transform: translateY(-2.75px) rotate(-45deg); }
+    .menu-btn { display: block; order: 3; }
+    .nav-cta { margin-left: auto; }
+  }
+  @media (max-width: 900px) {
+    .incluye { grid-template-columns: repeat(2, 1fr); }
+    .primers, .metales { grid-template-columns: 1fr; gap: 48px; }
+    .pasos { grid-template-columns: repeat(3, 1fr); row-gap: 40px; }
+    .pasos::before { display: none; }
+  }
   @media (max-width: 760px) {
-    nav.links { display: none; }
-    .svc-grid { grid-template-columns: 1fr; }
+    body { font-size: 16px; }
+    section { padding: 84px 0; }
+    .cabeza { margin-bottom: 44px; }
+    .hero { padding-top: 64px; }
+    .hero-pie { margin-top: -20px; }
+    .comparador, .comparador.dos { grid-template-columns: 1fr; }
+    .modelo + .modelo::before { left: 32px; right: 32px; top: 0; bottom: auto; width: auto; height: 1px; }
+    .modelo .alcance { min-height: 0; }
+    .dm-grid { grid-template-columns: 1fr; }
+    .dm.ancho { flex-direction: column; text-align: center; gap: 0; padding: 48px 28px; }
+    .taller { flex-direction: column; align-items: flex-start; padding: 32px 26px; gap: 24px; }
+    .elemento { padding: 11px 12px; border-radius: 12px; }
+    .elemento .z { font-size: 16px; }
+    .elemento .ox { font-size: 9.5px; }
+    .elemento .nom { font-size: 13px; }
+    .elemento .masa, .elemento .conf { font-size: 10px; }
+    .incluye { grid-template-columns: 1fr; gap: 32px; }
     .proyectos-grid { grid-template-columns: 1fr; }
     .proyecto-card.con-visor { flex-direction: column; }
-    .proyecto-card.con-visor .visor-col { border-right: none; border-bottom: 1px solid var(--gray-200); }
-    .visor-wrap { height: 320px; }
-    .visor-info { max-width: 60%; font-size: 11px; }
-    .steps { grid-template-columns: repeat(3, 1fr); row-gap: 24px; }
+    .proyecto-card .body, .proyecto-card.con-visor .body { padding: 28px 24px; }
+    .visor-wrap { height: 340px; }
+    .visor-info { max-width: 62%; font-size: 12px; }
+    .pasos { grid-template-columns: repeat(2, 1fr); }
     .field-row { flex-direction: column; gap: 0; }
-    .hero h1 { font-size: 27px; }
-    form.quote { padding: 26px 22px; }
+    .secuencia { padding: 28px 22px; font-size: 13px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .orbita { animation: none; }
+    .hero .entra { animation: none; opacity: 1; transform: none; }
   }
 </style>
 </head>
 <body>
 
-<header class="nav">
+<header class="nav" id="nav">
   <div class="wrap">
     <a class="brand" href="#top">
-      <img src="./assets/logo-icono.png" alt="Axolotl Discovery">
-      <span>AXOLOTL DISCOVERY</span>
+      <img src="./assets/logo-icono.png" alt="">
+      <span>Axolotl Discovery</span>
     </a>
-    <nav class="links">
+    <nav class="links" id="menu">
       <a href="#servicios">Servicios</a>
+      <a href="#metales">Metales</a>
+      <a href="#dinamica-molecular">Dinámica</a>
       <a href="#primers">Primers PCR</a>
-      <a href="#proceso">Cómo trabajamos</a>
       <a href="#proyectos">Proyectos</a>
       <a href="#educacion">Educación</a>
       <a href="#contacto">Contacto</a>
     </nav>
-    <a class="nav-cta" href="#cotiza">Cotizar proyecto</a>
+    <a class="nav-cta" href="#cotiza">Cotizar</a>
+    <button class="menu-btn" id="menuBtn" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu"><span></span><span></span></button>
   </div>
 </header>
 
 <div id="top"></div>
-<section class="hero">
+<section class="hero oscuro" style="padding-bottom:0">
   <div class="wrap">
-    <img class="icon" src="./assets/logo-full.png" alt="Axolotl Discovery">
-    <h1>Docking molecular y <em>drug discovery</em><br>computacional</h1>
-    <p class="lead">
-      Cribado virtual, modelado de receptores y análisis de interacciones
-      proteína-ligando, y ahora también diseño de primers para PCR, para tu
-      proyecto de investigación, tesis o desarrollo de fármacos.
-    </p>
-    <div class="cta-row">
-      <a class="btn btn-primary" href="#servicios">Ver paquetes</a>
-      <a class="btn btn-outline" href="#cotiza">Cotizar mi proyecto</a>
+    <img class="logo entra" src="./assets/logo-icono.png" alt="Axolotl Discovery">
+    <h1 class="titulo-xl entra d1">Mira cómo se une tu molécula.</h1>
+    <p class="sub entra d2">Docking molecular, dinámica molecular y diseño de primers para tu tesis, tu laboratorio o tu próximo fármaco.</p>
+    <div class="acciones-centro entra d3">
+      <a class="btn btn-primary" href="#cotiza">Cotizar mi proyecto</a>
+      <a class="link" href="#servicios">Ver paquetes ›</a>
     </div>
-    <div class="badges">
-      <div class="badge"><span class="n">8 paquetes</span><span class="l">A la medida de tu proyecto</span></div>
-      <div class="badge"><span class="n">Vina · Smina · AD4</span><span class="l">Motores de docking</span></div>
-      <div class="badge"><span class="n">AlphaFold2</span><span class="l">Modelado de receptores</span></div>
+  </div>
+  <div class="hero-visor entra d4" id="heroVisor" aria-label="Modelo 3D de un receptor con un ligando acoplado. Arrastra para girarlo.">
+    <div class="canvas3d" id="heroCanvas"></div>
+  </div>
+  <p class="hero-pie">Receptor µ-opioide humano (PDB 8EF5) con un ligando acoplado en el sitio ortostérico, <b>−9.4 kcal/mol</b>. Es uno de nuestros proyectos reales; arrástralo para girarlo.</p>
+</section>
+
+<section class="gris">
+  <div class="wrap">
+    <div class="cabeza">
+      <h2 class="titulo-l">Todo trabajo de docking incluye lo necesario para publicarlo.</h2>
+    </div>
+    <div class="incluye">
+      <div>
+        <div class="cifra">5–10</div>
+        <h3>Figuras profesionales</h3>
+        <p>Poses, interacciones y superficies listas para tu tesis o artículo.</p>
+      </div>
+      <div>
+        <div class="cifra">2–5</div>
+        <h3>Controles</h3>
+        <p>Positivos y negativos en total, para que tus resultados tengan contra qué compararse.</p>
+      </div>
+      <div>
+        <div class="cifra">1</div>
+        <h3>Documento de análisis</h3>
+        <p>Metodología, resultados y una discusión breve con mini revisión bibliográfica.</p>
+      </div>
+      <div>
+        <div class="cifra">$0</div>
+        <h3>Preparación de ligandos</h3>
+        <p>Sin costo extra, con asesoría para elegirlos si todavía no los tienes definidos.</p>
+      </div>
     </div>
   </div>
 </section>
 
 <section id="servicios">
   <div class="wrap">
-    <div class="section-head">
-      <div class="kicker">Servicios</div>
-      <h2>Paquetes de docking</h2>
-      <p>Elige según número de dianas (proteínas objetivo) y de ligandos a evaluar.</p>
+    <div class="cabeza">
+      <h2 class="titulo-l">Elige tu paquete.</h2>
+      <p class="sub">Según cuántas dianas (proteínas objetivo) y cuántos ligandos quieras evaluar. Precios en pesos mexicanos.</p>
     </div>
 
-    <div class="includes">
-      <b>Todo trabajo de docking incluye:</b> preparación de los ligandos y asesoría para
-      elegirlos si no los tienes definidos, 5 a 10 figuras profesionales, un documento de
-      análisis con metodología, resultados y una breve discusión con mini revisión
-      bibliográfica, y entre 2 y 5 controles positivos y negativos en total.
+    <div class="grupo">
+      <h3>Una diana</h3>
+      <p>Para estudiar a fondo una sola proteína.</p>
+      <div class="comparador" style="background: var(--gray-100);">
+        <div class="modelo">
+          <h4>Ajolote Explorador</h4>
+          <p class="alcance">1 diana, hasta 5 ligandos.</p>
+          <div class="precio">$1,200<small>MXN</small></div>
+          <p class="nota">Ideal como primer acercamiento.</p>
+          <button class="btn btn-primary choose" data-pkg="Ajolote Explorador">Elegir</button>
+        </div>
+        <div class="modelo">
+          <h4>Ajolote Certero</h4>
+          <p class="alcance">1 diana, hasta 10 ligandos.</p>
+          <div class="precio">$2,000<small>MXN</small></div>
+          <p class="nota">Cribado ampliado de una sola diana.</p>
+          <button class="btn btn-primary choose" data-pkg="Ajolote Certero">Elegir</button>
+        </div>
+        <div class="modelo">
+          <h4>Ajolote a la Medida</h4>
+          <p class="alcance">1 diana, 15 ligandos en adelante.</p>
+          <div class="precio texto">Cotización</div>
+          <p class="nota">Volumen alto, precio negociable.</p>
+          <button class="btn btn-secundario choose" data-pkg="Ajolote a la Medida">Cotizar</button>
+        </div>
+      </div>
     </div>
 
-    <div class="svc-grid">
-      <div class="svc-card">
-        <div class="top"><h3>Ajolote Explorador</h3><span class="price">$1,200</span></div>
-        <p class="scope">Docking en 1 diana, hasta 5 ligandos.</p>
-        <div class="tag">Entrada · ideal para primer acercamiento</div>
-        <button class="choose" data-pkg="Ajolote Explorador">Elegir este paquete</button>
+    <div class="grupo">
+      <h3>Varias dianas</h3>
+      <p>Para comparar tus ligandos contra varias proteínas a la vez.</p>
+      <div class="comparador dos" style="background: var(--gray-100);">
+        <div class="modelo">
+          <h4>Quinto Sol</h4>
+          <p class="alcance">Cribado en 5 dianas, hasta 5 ligandos por diana.</p>
+          <div class="precio">$2,500<small>MXN</small></div>
+          <p class="nota">Multi-diana, alcance medio.</p>
+          <button class="btn btn-primary choose" data-pkg="Quinto Sol">Elegir</button>
+        </div>
+        <div class="modelo">
+          <h4>Xochimilco</h4>
+          <p class="alcance">Cribado en 10 dianas, de 5 a 10 ligandos por diana.</p>
+          <div class="precio">$3,000<small>MXN</small></div>
+          <p class="nota">Multi-diana, alcance amplio.</p>
+          <button class="btn btn-primary choose" data-pkg="Xochimilco">Elegir</button>
+        </div>
       </div>
-      <div class="svc-card">
-        <div class="top"><h3>Ajolote Certero</h3><span class="price">$2,000</span></div>
-        <p class="scope">Docking en 1 diana, hasta 10 ligandos.</p>
-        <div class="tag">Cribado ampliado de una sola diana</div>
-        <button class="choose" data-pkg="Ajolote Certero">Elegir este paquete</button>
+    </div>
+
+    <div class="grupo">
+      <h3>Sin estructura experimental</h3>
+      <p>Cuando tu proteína todavía no tiene estructura cristalográfica.</p>
+      <div class="comparador uno" style="background: var(--gray-100);">
+        <div class="modelo">
+          <h4>Alebrije</h4>
+          <p class="alcance" style="max-width:520px">Modelado del receptor con AlphaFold2 y docking de hasta 5 ligandos. Incluye análisis de fiabilidad del modelo mediante análogos estructurales.</p>
+          <div class="precio">$2,000<small>MXN</small></div>
+          <p class="nota">Modelado + docking en un solo paquete.</p>
+          <button class="btn btn-primary choose" data-pkg="Alebrije">Elegir</button>
+        </div>
       </div>
-      <div class="svc-card">
-        <div class="top"><h3>Ajolote a la Medida</h3><span class="price">Cotización</span></div>
-        <p class="scope">Docking en 1 diana, 15 ligandos en adelante.</p>
-        <div class="tag">Volumen alto · precio negociable</div>
-        <button class="choose" data-pkg="Ajolote a la Medida">Elegir este paquete</button>
-      </div>
-      <div class="svc-card">
-        <div class="top"><h3>Quinto Sol</h3><span class="price">$2,500</span></div>
-        <p class="scope">Cribado en 5 dianas, hasta 5 ligandos por diana.</p>
-        <div class="tag">Multi-diana · alcance medio</div>
-        <button class="choose" data-pkg="Quinto Sol">Elegir este paquete</button>
-      </div>
-      <div class="svc-card">
-        <div class="top"><h3>Xochimilco</h3><span class="price">$3,000</span></div>
-        <p class="scope">Cribado en 10 dianas, de 5 a 10 ligandos por diana.</p>
-        <div class="tag">Multi-diana · alcance amplio</div>
-        <button class="choose" data-pkg="Xochimilco">Elegir este paquete</button>
-      </div>
-      <div class="svc-card">
-        <div class="top"><h3>Alebrije</h3><span class="price">$2,000</span></div>
-        <p class="scope">Modelado de receptor con AlphaFold2 (sin estructura cristalográfica)
-          + docking hasta 5 ligandos. Incluye análisis de fiabilidad del modelo mediante
-          análogos estructurales.</p>
-        <div class="tag">Cuando no existe estructura experimental</div>
-        <button class="choose" data-pkg="Alebrije">Elegir este paquete</button>
+    </div>
+
+    <div class="grupo">
+      <h3>Cribado virtual</h3>
+      <p>Para encontrar candidatos entre cientos o miles de compuestos.</p>
+      <div class="comparador uno" style="background: var(--gray-100);">
+        <div class="modelo">
+          <h4>Cenote</h4>
+          <p class="alcance" style="max-width:560px">Docking de una biblioteca completa contra tu diana: la tuya o productos naturales de la base abierta COCONUT. Te entregamos los mejores candidatos ordenados, con sus interacciones y figuras.</p>
+          <div class="precio texto">Cotización</div>
+          <p class="nota">El precio depende del tamaño de la biblioteca.</p>
+          <button class="btn btn-secundario choose" data-pkg="Cribado virtual">Cotizar</button>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<section id="dinamica-molecular">
+<section id="metales" class="oscuro">
   <div class="wrap">
-    <div class="section-head">
-      <div class="kicker">Complemento</div>
-      <h2>Validación por dinámica molecular</h2>
-      <p>Para confirmar la estabilidad de las poses obtenidas por docking.</p>
-    </div>
-
-    <div class="svc-grid">
-      <div class="svc-card">
-        <div class="top"><h3>Rebozo Corto</h3><span class="price">$5,000</span></div>
-        <p class="scope">Dinámica molecular de 10 ns sobre el complejo receptor-ligando.</p>
-        <div class="tag">Validación rápida de estabilidad</div>
-        <button class="choose-dm" data-dm="Rebozo Corto">Agregar este complemento</button>
+    <div class="metales">
+      <div>
+        <h2 class="titulo-l">Docking con metales.</h2>
+        <p class="desc">Complejos de vanadio, platino, rutenio o cobre que los programas de docking comunes no saben acoplar. Nosotros parametrizamos el metal y los dockeamos.</p>
+        <ul>
+          <li>AutoDock4 con parámetros del metal basados en el Universal Force Field.</li>
+          <li>Cargas parciales que conservan la carga formal del complejo.</li>
+          <li>Archivo de parámetros listo para tu sección de métodos.</li>
+        </ul>
+        <p class="aviso">Son parámetros genéricos: sirven para comparar poses y sitios entre sí. Recomendamos validar con dinámica molecular.</p>
+        <button class="btn btn-primary choose" data-pkg="Docking con metales">Cotizar docking con metales</button>
       </div>
-      <div class="svc-card">
-        <div class="top"><h3>Rebozo Largo</h3><span class="price">$10,000</span></div>
-        <p class="scope">Dinámica molecular de 20 a 50 ns sobre el complejo receptor-ligando.</p>
-        <div class="tag">Validación extendida de estabilidad</div>
-        <button class="choose-dm" data-dm="Rebozo Largo">Agregar este complemento</button>
+      <div class="tabla" role="group" aria-label="Ejemplos de metales que dockeamos">
+        <button type="button" class="elemento activo" aria-pressed="true" data-capas="2,8,11,2">
+          <span class="arriba"><span class="z">23</span><span class="ox"><b>+5</b><br>+4<br>+3<br>+2</span></span>
+          <span class="sim">V</span>
+          <span class="nom">Vanadio</span>
+          <span class="masa">50.942</span>
+          <span class="conf">[Ar] 3d³ 4s²</span>
+        </button>
+        <button type="button" class="elemento" aria-pressed="false" data-capas="2,8,18,1">
+          <span class="arriba"><span class="z">29</span><span class="ox"><b>+2</b><br>+1</span></span>
+          <span class="sim">Cu</span>
+          <span class="nom">Cobre</span>
+          <span class="masa">63.546</span>
+          <span class="conf">[Ar] 3d¹⁰ 4s¹</span>
+        </button>
+        <button type="button" class="elemento" aria-pressed="false" data-capas="2,8,18,15,1">
+          <span class="arriba"><span class="z">44</span><span class="ox">+4<br><b>+3</b><br>+2</span></span>
+          <span class="sim">Ru</span>
+          <span class="nom">Rutenio</span>
+          <span class="masa">101.07</span>
+          <span class="conf">[Kr] 4d⁷ 5s¹</span>
+        </button>
+        <button type="button" class="elemento" aria-pressed="false" data-capas="2,8,18,32,17,1">
+          <span class="arriba"><span class="z">78</span><span class="ox">+4<br><b>+2</b></span></span>
+          <span class="sim">Pt</span>
+          <span class="nom">Platino</span>
+          <span class="masa">195.08</span>
+          <span class="conf">[Xe] 4f¹⁴ 5d⁹ 6s¹</span>
+        </button>
+        <p class="tabla-pie">Toca un elemento para ver su átomo.</p>
       </div>
-    </div>
-
-    <div class="includes" style="margin-top:28px; border-left-color: var(--gray-400);">
-      Rebozo Corto y Rebozo Largo son complementos de validación y se cotizan junto con el
-      paquete de docking correspondiente — no lo sustituyen.
     </div>
   </div>
 </section>
 
-<section id="primers">
+<section id="complementos" class="gris">
   <div class="wrap">
-    <div class="section-head">
-      <div class="kicker">Nuevo servicio</div>
-      <h2>Diseño de primers para PCR</h2>
-      <p>Oligonucleótidos diseñados in silico para que tu PCR funcione a la primera.</p>
+    <div class="cabeza">
+      <h2 class="titulo-l">Complementos para tu docking.</h2>
+      <p class="sub">Análisis extra que se suman a cualquier paquete.</p>
     </div>
-
-    <div class="svc-grid">
-      <div class="svc-card" style="grid-column: 1 / -1;">
-        <div class="top"><h3>Diseño de primers para PCR</h3><span class="price">Cotización</span></div>
-        <p class="scope">Diseño de primers a partir de tu secuencia blanco, evaluando Tm, contenido GC,
-          formación de dímeros y horquillas, estructuras secundarias y especificidad. Realizado
-          con herramientas open source.</p>
-        <div class="tag">Nuevo · biología molecular</div>
-        <button class="choose" data-pkg="Diseño de primers">Cotizar este servicio</button>
+    <div class="comparador">
+      <div class="modelo">
+        <h4>Perfil drug-likeness</h4>
+        <p class="alcance">Reglas de Lipinski y Veber, QED, alertas PAINS y accesibilidad sintética de tus ligandos.</p>
+        <p class="herramienta">Con RDKit</p>
+        <div class="precio texto">Cotización</div>
+        <p class="nota">Una tabla y una figura por lote.</p>
+        <button class="btn btn-secundario choose" data-pkg="Perfil drug-likeness">Agregar</button>
+      </div>
+      <div class="modelo">
+        <h4>Búsqueda de bolsillos</h4>
+        <p class="alcance">Detectamos y clasificamos los sitios de unión posibles cuando no se sabe dónde se une tu ligando.</p>
+        <p class="herramienta">Con fpocket</p>
+        <div class="precio texto">Cotización</div>
+        <p class="nota">Ideal para proteínas poco estudiadas.</p>
+        <button class="btn btn-secundario choose" data-pkg="Búsqueda de bolsillos">Agregar</button>
+      </div>
+      <div class="modelo">
+        <h4>Química cuántica de ligandos</h4>
+        <p class="alcance">Geometría optimizada, cargas y orbitales HOMO-LUMO de tus ligandos.</p>
+        <p class="herramienta">Con xtb y Psi4</p>
+        <div class="precio texto">Cotización</div>
+        <p class="nota">Útil para explicar la reactividad.</p>
+        <button class="btn btn-secundario choose" data-pkg="Química cuántica de ligandos">Agregar</button>
       </div>
     </div>
+  </div>
+</section>
 
-    <div class="includes" style="margin-top:28px;">
-      <b>Docking de cortesía:</b> los paquetes de diseño de primers de $800 MXN o más
-      incluyen un docking molecular sin costo adicional.
+<section id="dinamica-molecular" class="oscuro">
+  <div class="wrap">
+    <div class="cabeza">
+      <h2 class="titulo-l">Confirma que la pose se queda ahí.</h2>
+      <p class="sub">Validación por dinámica molecular sobre el complejo receptor-ligando, como complemento a tu paquete de docking.</p>
+    </div>
+    <div class="dm-grid">
+      <div class="dm">
+        <div class="ns">10<small>ns</small></div>
+        <h3>Rebozo Corto</h3>
+        <p>Validación rápida de estabilidad.</p>
+        <div class="precio">$5,000 MXN</div>
+        <button class="btn btn-secundario choose-dm" data-dm="Rebozo Corto">Agregar a mi cotización</button>
+      </div>
+      <div class="dm">
+        <div class="ns">20–50<small>ns</small></div>
+        <h3>Rebozo Largo</h3>
+        <p>Validación extendida de estabilidad.</p>
+        <div class="precio">$10,000 MXN</div>
+        <button class="btn btn-secundario choose-dm" data-dm="Rebozo Largo">Agregar a mi cotización</button>
+      </div>
+    </div>
+    <div class="dm-grid" style="margin-top:20px">
+      <div class="dm ancho">
+        <div class="ns">ΔG</div>
+        <div>
+          <h3>Energía libre de unión por MM-GBSA</h3>
+          <p>Calculamos la ΔG de unión sobre la trayectoria de tu dinámica molecular, una estimación más confiable que el score de docking para ordenar tus ligandos. Requiere Rebozo Corto o Largo.</p>
+          <div class="precio">Cotización</div>
+          <button class="btn btn-secundario choose" data-pkg="MM-GBSA">Agregar a mi cotización</button>
+        </div>
+      </div>
+    </div>
+    <p class="aviso-oscuro">Rebozo Corto y Rebozo Largo se cotizan junto con el paquete de docking correspondiente; no lo sustituyen.</p>
+  </div>
+</section>
+
+<section id="primers" class="gris">
+  <div class="wrap">
+    <div class="primers">
+      <div>
+        <h2 class="titulo-l">Primers que funcionan a la primera.</h2>
+        <p class="desc">Diseñamos tus primers para PCR a partir de tu secuencia blanco, evaluando Tm, contenido GC, dímeros, horquillas, estructuras secundarias y especificidad. Todo con herramientas open source.</p>
+        <p class="regalo"><b>Docking de cortesía.</b> Los diseños de primers de $800 MXN o más incluyen un docking molecular sin costo adicional.</p>
+        <button class="btn btn-primary choose" data-pkg="Diseño de primers">Cotizar diseño de primers</button>
+      </div>
+      <div class="secuencia" aria-label="Ejemplo ilustrativo de una secuencia con primers forward y reverse marcados">
+        5′-GCTAAC<span class="fw">ATGGCTTCCAAGGTCTACGA</span>CCTGAAGGATCTTGGAGCCAATTCCAGGCTTGTCAACGATCTGGTTCAGCAAGATTTGGAG<span class="rv">GTCGACTTCAAGCTGGTGTC</span>ACGTTA-3′
+        <div class="leyenda"><span><i style="background:var(--rosa)"></i>Primer forward</span><span><i style="background:var(--ink)"></i>Sitio del primer reverse</span><span>Secuencia de ejemplo</span></div>
+        <div class="datos">
+          <div><b>Tm</b>Temperatura de fusión balanceada</div>
+          <div><b>%GC</b>Contenido GC en rango</div>
+          <div><b>ΔG</b>Sin dímeros ni horquillas</div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<section id="proceso" class="alt">
+<section id="proceso">
   <div class="wrap">
-    <div class="section-head">
-      <div class="kicker">Metodología</div>
-      <h2>Cómo trabajamos</h2>
-      <p>Un flujo estandarizado y reproducible en cada proyecto.</p>
+    <div class="cabeza">
+      <h2 class="titulo-l">Cómo trabajamos.</h2>
+      <p class="sub">El mismo flujo estandarizado y reproducible en cada proyecto.</p>
     </div>
-    <div class="steps">
-      <div class="step"><div class="num">1</div><div class="label">Estructura del receptor</div></div>
-      <div class="step"><div class="num">2</div><div class="label">Limpieza y conversión PDBQT</div></div>
-      <div class="step"><div class="num">3</div><div class="label">Ligandos y grid box</div></div>
-      <div class="step"><div class="num">4</div><div class="label">Docking (Vina / smina / AD4)</div></div>
-      <div class="step"><div class="num">5</div><div class="label">Interacciones y figuras</div></div>
-      <div class="step"><div class="num">6</div><div class="label">Reporte final</div></div>
+    <div class="pasos">
+      <div class="paso"><div class="num">1</div><div class="label">Estructura del receptor</div><div class="det">PDB o AlphaFold2</div></div>
+      <div class="paso"><div class="num">2</div><div class="label">Limpieza y PDBQT</div><div class="det">Cadenas, cofactores, hidrógenos</div></div>
+      <div class="paso"><div class="num">3</div><div class="label">Ligandos y caja</div><div class="det">3D, cargas, grid box</div></div>
+      <div class="paso"><div class="num">4</div><div class="label">Docking</div><div class="det">Vina, smina o AD4</div></div>
+      <div class="paso"><div class="num">5</div><div class="label">Interacciones y figuras</div><div class="det">Puentes de H, π, salinos</div></div>
+      <div class="paso"><div class="num">6</div><div class="label">Reporte final</div><div class="det">Listo para tu tesis</div></div>
     </div>
   </div>
 </section>
 
-<section id="proyectos">
+<section id="proyectos" class="oscuro">
   <div class="wrap">
-    <div class="section-head">
-      <div class="kicker">Portafolio</div>
-      <h2>Proyectos</h2>
-      <p>Trabajos que hemos realizado para nuestros clientes.</p>
+    <div class="cabeza">
+      <h2 class="titulo-l">Proyectos.</h2>
+      <p class="sub">Trabajos que hemos realizado para nuestros clientes. Explóralos en 3D.</p>
     </div>
 
     <div id="proyectos-grid" class="proyectos-grid"></div>
 
     <div id="proyectos-vacio" class="proyectos-vacio" style="display:none;">
-      Estamos preparando nuestro portafolio — pronto encontrarás aquí los proyectos
+      Estamos preparando nuestro portafolio. Pronto encontrarás aquí los proyectos
       en los que hemos trabajado.
     </div>
   </div>
 </section>
 
-<section id="educacion" class="alt">
+<section id="educacion" class="gris">
   <div class="wrap">
-    <div class="section-head">
-      <div class="kicker">Divulgación y docencia</div>
-      <h2>Axolotl for Education</h2>
-      <p>Herramientas que diseñamos para enseñar y aprender química computacional,
-        docking y biología molecular — gratuitas para estudiantes y profesores.</p>
+    <div class="cabeza">
+      <h2 class="titulo-l">Axolotl for Education.</h2>
+      <p class="sub">Herramientas que diseñamos para enseñar y aprender química computacional, docking y biología molecular, gratuitas para estudiantes y profesores.</p>
     </div>
 
     <div id="educacion-grid" class="proyectos-grid"></div>
 
     <div id="educacion-vacio" class="proyectos-vacio" style="display:none;">
-      Estamos preparando nuestras primeras herramientas educativas — muy pronto
+      Estamos preparando nuestras primeras herramientas educativas. Muy pronto
       las encontrarás aquí.
+    </div>
+
+    <div class="taller">
+      <div>
+        <h3>Talleres de docking</h3>
+        <p>Para tu grupo de investigación, laboratorio o clase. Aprenden a hacer docking de principio a fin con herramientas libres, en sus propias computadoras.</p>
+      </div>
+      <button class="btn btn-primary choose" data-pkg="Taller de docking">Cotizar un taller</button>
     </div>
   </div>
 </section>
 
 <section id="cotiza">
   <div class="wrap">
-    <div class="section-head">
-      <div class="kicker">Cotización</div>
-      <h2>Cotiza tu proyecto</h2>
-      <p>Completa el formulario y levantamos tu solicitud — te confirmamos alcance y precio por correo.</p>
+    <div class="cabeza">
+      <h2 class="titulo-l">Cotiza tu proyecto.</h2>
+      <p class="sub">Cuéntanos qué necesitas y te confirmamos alcance y precio por correo.</p>
     </div>
 
     <form class="quote" id="quoteForm">
       <div class="field-row">
         <div class="field">
           <label for="nombre">Nombre</label>
-          <input type="text" id="nombre" name="nombre" required>
+          <input type="text" id="nombre" name="nombre" autocomplete="name" required>
         </div>
         <div class="field">
           <label for="correo">Correo</label>
-          <input type="email" id="correo" name="correo" required>
+          <input type="email" id="correo" name="correo" autocomplete="email" required>
         </div>
       </div>
 
       <div class="field-row">
         <div class="field">
           <label for="telefono">Teléfono (opcional)</label>
-          <input type="tel" id="telefono" name="telefono">
+          <input type="tel" id="telefono" name="telefono" autocomplete="tel">
         </div>
         <div class="field">
           <label for="paquete">Paquete de interés</label>
@@ -496,7 +742,14 @@
             <option value="Quinto Sol">Quinto Sol — 5 dianas ($2,500)</option>
             <option value="Xochimilco">Xochimilco — 10 dianas ($3,000)</option>
             <option value="Alebrije">Alebrije — Modelado AlphaFold2 + docking ($2,000)</option>
+            <option value="Cribado virtual">Cenote — Cribado virtual de una biblioteca (cotización)</option>
+            <option value="Docking con metales">Docking con metales (cotización)</option>
+            <option value="Perfil drug-likeness">Perfil drug-likeness (cotización)</option>
+            <option value="Búsqueda de bolsillos">Búsqueda de bolsillos (cotización)</option>
+            <option value="Química cuántica de ligandos">Química cuántica de ligandos (cotización)</option>
+            <option value="MM-GBSA">Energía libre de unión por MM-GBSA (cotización)</option>
             <option value="Diseño de primers">Diseño de primers para PCR (cotización)</option>
+            <option value="Taller de docking">Taller de docking (cotización)</option>
             <option value="No estoy seguro">No estoy seguro / quiero asesoría</option>
           </select>
         </div>
@@ -524,28 +777,81 @@
 
       <div class="field">
         <label for="notas">Cuéntanos sobre tu proyecto</label>
-        <textarea id="notas" name="notas" rows="4" placeholder="Objetivo del proyecto, receptores/ligandos que ya tengas identificados, fecha en que necesitas los resultados, etc."></textarea>
+        <textarea id="notas" name="notas" rows="5" placeholder="Objetivo del proyecto, receptores o ligandos que ya tengas identificados, fecha en que necesitas los resultados…"></textarea>
       </div>
 
-      <button type="submit">Solicitar cotización</button>
+      <button type="submit" class="btn btn-primary">Solicitar cotización</button>
       <div class="form-note">
         Al enviar se abrirá tu programa de correo con la solicitud ya redactada, lista para
         mandar a <a href="mailto:fcoarmandosd@ieee.org">fcoarmandosd@ieee.org</a>.
-        Si no se abre automáticamente, escríbenos directo a ese correo.
+        Si no se abre, escríbenos directo a ese correo.
       </div>
     </form>
   </div>
 </section>
 
 <footer id="contacto">
-  <img src="./assets/logo-icono.png" alt="Axolotl Discovery">
-  <div class="tag">Docking molecular &amp; drug discovery computacional</div>
-  <div class="contact">Contacto: <a href="mailto:fcoarmandosd@ieee.org">fcoarmandosd@ieee.org</a> · GitHub: <a href="https://github.com/Axolotl-Discovery" target="_blank" rel="noopener">github.com/Axolotl-Discovery</a></div>
-  <div class="copy">© <span id="year"></span> Axolotl Discovery</div>
+  <div class="wrap">
+    <div class="fila">
+      <div class="marca"><img src="./assets/logo-icono.png" alt="">Axolotl Discovery</div>
+      <div>Correo: <a href="mailto:fcoarmandosd@ieee.org">fcoarmandosd@ieee.org</a>&nbsp;&nbsp;·&nbsp;&nbsp;GitHub: <a href="https://github.com/Axolotl-Discovery" target="_blank" rel="noopener">Axolotl-Discovery</a></div>
+    </div>
+    <div class="legal">
+      <span>© <span id="year"></span> Axolotl Discovery. Docking molecular y drug discovery computacional.</span>
+      <span>Puebla, México</span>
+    </div>
+  </div>
 </footer>
 
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ===================== MENÚ MÓVIL =====================
+  (function() {
+    var nav = document.getElementById('nav');
+    var btn = document.getElementById('menuBtn');
+    btn.addEventListener('click', function() {
+      var abierto = nav.classList.toggle('abierto');
+      btn.setAttribute('aria-expanded', abierto ? 'true' : 'false');
+    });
+    document.getElementById('menu').addEventListener('click', function(e) {
+      if (e.target.closest('a')) { nav.classList.remove('abierto'); btn.setAttribute('aria-expanded', 'false'); }
+    });
+  })();
+
+  // ===================== METALES: átomos animados =====================
+  // Cada casilla dibuja su átomo (modelo de capas) con los electrones reales por capa (data-capas).
+  (function() {
+    var NS = 'http://www.w3.org/2000/svg';
+    function el(tag, attrs) { var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); return e; }
+    var casillas = document.querySelectorAll('.elemento');
+    casillas.forEach(function(c) {
+      var capas = c.getAttribute('data-capas').split(',').map(Number);
+      var svg = el('svg', { viewBox: '0 0 200 200', 'aria-hidden': 'true', preserveAspectRatio: 'xMidYMid meet' });
+      var n = capas.length, rMin = 24, rMax = 96;
+      capas.forEach(function(e, i) {
+        var r = n === 1 ? rMax : rMin + i * (rMax - rMin) / (n - 1);
+        var g = el('g', { 'class': 'orbita' + (i % 2 ? ' inv' : '') });
+        g.style.animationDuration = (7 + i * 4) + 's';
+        g.appendChild(el('circle', { cx: 100, cy: 100, r: r, fill: 'none', stroke: '#ffffff', 'stroke-opacity': 0.45, 'stroke-width': 0.6 }));
+        var re = e > 20 ? 1.7 : (e > 10 ? 2.1 : 2.6);
+        for (var k = 0; k < e; k++) {
+          var t = (k / e) * Math.PI * 2 + i * 0.6;
+          g.appendChild(el('circle', { cx: (100 + r * Math.cos(t)).toFixed(2), cy: (100 + r * Math.sin(t)).toFixed(2), r: re, fill: '#ffffff' }));
+        }
+        svg.appendChild(g);
+      });
+      svg.appendChild(el('circle', { cx: 100, cy: 100, r: 9, fill: '#ffffff', 'fill-opacity': 0.9 }));
+      var cont = document.createElement('span');
+      cont.className = 'atomo';
+      cont.appendChild(svg);
+      c.insertBefore(cont, c.firstChild);
+      c.addEventListener('click', function() {
+        casillas.forEach(function(o) { o.classList.toggle('activo', o === c); o.setAttribute('aria-pressed', o === c ? 'true' : 'false'); });
+      });
+    });
+  })();
 
   // ===================== PORTAFOLIO =====================
   // Los proyectos se leen de assets/proyectos.json (ver README.md).
@@ -555,7 +861,7 @@
     });
   }
 
-  // Carga la librería 3Dmol.js (local, en assets/lib) solo si algún proyecto la necesita
+  // Carga la librería 3Dmol.js (local, en assets/lib)
   var _3dmolPromise = null;
   function cargar3Dmol() {
     if (window.$3Dmol) return Promise.resolve(window.$3Dmol);
@@ -569,6 +875,35 @@
     });
     return _3dmolPromise;
   }
+
+  var LIG = { hetflag: true };
+  var LIG_COLOR = { prop: 'elem', map: { C: 0xF2A7C6, N: 0x6f9bff, O: 0xff5a4f, S: 0xf5d547, H: 0xffffff } };
+
+  // ===================== HERO 3D =====================
+  // Complejo real del portafolio, girando sobre fondo negro.
+  (function() {
+    var cont = document.getElementById('heroCanvas');
+    var archivo = './assets/proyectos/AXD-GAL-26-01/MOR_fentanilo_site2.pdb';
+    Promise.all([cargar3Dmol(), fetch(archivo).then(function(r) { if (!r.ok) throw new Error(r.status); return r.text(); })])
+      .then(function(res) {
+        var $3Dmol = res[0], pdb = res[1];
+        var v = $3Dmol.createViewer(cont, { backgroundColor: '#000000', antialias: true });
+        v.addModel(pdb, 'pdb');
+        v.setStyle({ hetflag: false }, { cartoon: { color: '#8a8a91' } });
+        v.setStyle(LIG, { stick: { radius: 0.26, colorscheme: LIG_COLOR }, sphere: { scale: 0.26, colorscheme: LIG_COLOR } });
+        v.addSurface($3Dmol.SurfaceType.VDW, { opacity: 0.18, color: '#AD4670' }, { within: { distance: 7, sel: LIG }, hetflag: false });
+        v.zoomTo({});
+        v.zoom(1.15);
+        v.setSlab(-1000, 1000);
+        if (!reduceMotion) v.spin('y', 0.35);
+        v.render();
+        window.addEventListener('resize', function() { v.resize(); v.render(); });
+      })
+      .catch(function(err) {
+        console.error('No se pudo cargar el modelo 3D de la portada:', err);
+        document.getElementById('heroVisor').style.display = 'none';
+      });
+  })();
 
   // Lee los REMARK del PDB (afinidad y tipo de corrida) para mostrarlos sin tener que escribirlos en el JSON
   function leerRemarks(pdb) {
@@ -612,12 +947,10 @@
     var viewer = null, actual = -1, cache = {};
     var estado = { vista: true, residuos: true, etiquetas: false, superficie: false, giro: false };
 
-    var LIG = { hetflag: true };
     var CERCA = { within: { distance: 4.5, sel: LIG }, hetflag: false };
-    var LIG_COLOR = { prop: 'elem', map: { C: 0xAD4670, N: 0x3b6fd8, O: 0xe0453a, S: 0xe8c22e, H: 0xffffff } };
 
     function dibujar(zoom) {
-      viewer.setStyle({}, { cartoon: { color: '#b9bec8', opacity: 0.9 } });
+      viewer.setStyle({}, { cartoon: { color: '#8a8a91', opacity: 0.9 } });
       viewer.setStyle(LIG, { stick: { radius: 0.22, colorscheme: LIG_COLOR }, sphere: { scale: 0.22, colorscheme: LIG_COLOR } });
       if (estado.residuos) {
         viewer.addStyle(CERCA, { stick: { radius: 0.13, colorscheme: 'grayCarbon' } });
@@ -625,11 +958,11 @@
       viewer.removeAllLabels();
       if (estado.etiquetas) {
         viewer.addResLabels(CERCA, { font: 'Arial', fontSize: 11, fontColor: '#ffffff',
-          backgroundColor: '#111111', backgroundOpacity: 0.65, showBackground: true });
+          backgroundColor: '#1d1d1f', backgroundOpacity: 0.7, showBackground: true });
       }
       viewer.removeAllSurfaces();
       if (estado.superficie) {
-        viewer.addSurface($3Dmol.SurfaceType.VDW, { opacity: 0.55, color: '#e9d3dc' },
+        viewer.addSurface($3Dmol.SurfaceType.VDW, { opacity: 0.45, color: '#AD4670' },
           { within: { distance: 9, sel: LIG }, hetflag: false });
       }
       viewer.spin(estado.giro ? 'y' : false);
@@ -692,10 +1025,10 @@
     });
     window.addEventListener('resize', function() { if (viewer) viewer.resize(); });
 
-    // Se inicia solo cuando el visor entra en pantalla (no carga nada si nadie baja al portafolio)
+    // Se inicia solo cuando el visor entra en pantalla
     function iniciar() {
       cargar3Dmol().then(function($3Dmol) {
-        viewer = $3Dmol.createViewer(canvas, { backgroundColor: '#0f1117', antialias: true });
+        viewer = $3Dmol.createViewer(canvas, { backgroundColor: '#000000', antialias: true });
         mostrar(0);
       }).catch(function() {
         msg.textContent = 'No se pudo cargar el visor 3D.';
@@ -731,8 +1064,8 @@
             return '<span class="etiqueta">' + esc(t) + '</span>';
           }).join('') + '</div>';
         }
-        var hintHtml = conVisor ? '<p class="visor-hint">Arrastra para rotar · rueda o pellizco para acercar · elige el complejo abajo del visor.</p>' : '';
-        var enlaceHtml = p.enlace ? '<a class="enlace" href="' + esc(p.enlace) + '" target="_blank" rel="noopener">Ver más →</a>' : '';
+        var hintHtml = conVisor ? '<p class="visor-hint">Arrastra para rotar, usa la rueda o pellizca para acercar y elige el complejo debajo del visor.</p>' : '';
+        var enlaceHtml = p.enlace ? '<a class="enlace" href="' + esc(p.enlace) + '" target="_blank" rel="noopener">Ver el proyecto en GitHub ›</a>' : '';
 
         card.innerHTML = (conVisor ? '<div class="visor-col"></div>' : thumbHtml) +
           '<div class="body">' +
@@ -781,8 +1114,8 @@
             return '<span class="etiqueta">' + esc(t) + '</span>';
           }).join('') + '</div>';
         }
-        var abrirHtml = h.enlace ? '<a class="abrir" href="' + esc(h.enlace) + '" target="_blank" rel="noopener">Abrir herramienta →</a>' : '';
-        var codigoHtml = h.codigo ? '<a class="enlace" href="' + esc(h.codigo) + '" target="_blank" rel="noopener">Código fuente</a>' : '';
+        var abrirHtml = h.enlace ? '<a class="abrir" href="' + esc(h.enlace) + '" target="_blank" rel="noopener">Abrir herramienta</a>' : '';
+        var codigoHtml = h.codigo ? '<a class="enlace" href="' + esc(h.codigo) + '" target="_blank" rel="noopener">Código fuente ›</a>' : '';
         card.innerHTML = thumbHtml +
           '<div class="body">' +
             '<h3>' + esc(h.titulo) + '</h3>' +
@@ -799,7 +1132,7 @@
       document.getElementById('educacion-vacio').style.display = 'block';
     });
 
-  // Botones "Elegir este paquete": preseleccionan el paquete y bajan al formulario
+  // Botones "Elegir": preseleccionan el paquete y bajan al formulario
   document.querySelectorAll('.choose').forEach(function(btn) {
     btn.addEventListener('click', function() {
       var pkg = btn.getAttribute('data-pkg');
@@ -807,11 +1140,11 @@
       for (var i = 0; i < select.options.length; i++) {
         if (select.options[i].value === pkg) { select.selectedIndex = i; break; }
       }
-      document.getElementById('cotiza').scrollIntoView({ behavior: 'smooth' });
+      document.getElementById('cotiza').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
     });
   });
 
-  // Botones "Agregar este complemento" (Rebozo Corto/Largo): preseleccionan el campo de DM
+  // Botones "Agregar a mi cotización" (Rebozo Corto/Largo): preseleccionan el campo de DM
   document.querySelectorAll('.choose-dm').forEach(function(btn) {
     btn.addEventListener('click', function() {
       var dm = btn.getAttribute('data-dm');
@@ -819,7 +1152,7 @@
       for (var i = 0; i < select.options.length; i++) {
         if (select.options[i].value === dm) { select.selectedIndex = i; break; }
       }
-      document.getElementById('cotiza').scrollIntoView({ behavior: 'smooth' });
+      document.getElementById('cotiza').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
     });
   });
 
