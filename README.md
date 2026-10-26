@@ -21,3 +21,9 @@ la sección muestra un aviso de "próximamente". Para agregar una herramienta, a
 ```
 
 Solo `titulo` y `descripcion` son obligatorios; los demás campos se pueden omitir.
+
+Para una app que se descarga (en vez de abrirse en el navegador) agrega:
+`"descarga": true` (el enlace se abre en la misma pestaña), `"boton": "Descargar para Windows"`
+(texto del botón; por defecto "Abrir herramienta") y `"nota": "Windows 10/11 · 160 MB"` (texto pequeño bajo el botón).
+Para que el enlace siempre baje la última versión usa
+`https://github.com/<org>/<repo>/releases/latest/download/<archivo>`.

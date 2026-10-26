@@ -241,6 +241,7 @@
   .edu-card .acciones { display: flex; flex-wrap: wrap; align-items: center; gap: 22px; }
   .edu-card a.abrir { background: var(--rosa); color: #fff; text-decoration: none; font-size: 15px; font-weight: 500; padding: 9px 20px; border-radius: 980px; }
   .edu-card a.abrir:hover { background: var(--rosa-dark); }
+  .edu-card .nota { flex-basis: 100%; font-size: 13px; color: var(--gray-500); }
 
   /* Visor 3D del portafolio */
   .proyecto-card.con-visor { grid-column: 1 / -1; flex-direction: row; }
@@ -1114,7 +1115,8 @@
             return '<span class="etiqueta">' + esc(t) + '</span>';
           }).join('') + '</div>';
         }
-        var abrirHtml = h.enlace ? '<a class="abrir" href="' + esc(h.enlace) + '" target="_blank" rel="noopener">Abrir herramienta</a>' : '';
+        var abrirHtml = h.enlace ? '<a class="abrir" href="' + esc(h.enlace) + '"' + (h.descarga ? '' : ' target="_blank" rel="noopener"') + '>' + esc(h.boton || 'Abrir herramienta') + '</a>' : '';
+        var notaHtml = h.nota ? '<span class="nota">' + esc(h.nota) + '</span>' : '';
         var codigoHtml = h.codigo ? '<a class="enlace" href="' + esc(h.codigo) + '" target="_blank" rel="noopener">Código fuente ›</a>' : '';
         card.innerHTML = thumbHtml +
           '<div class="body">' +
@@ -1122,7 +1124,7 @@
             nivelHtml +
             '<p class="resumen">' + esc(h.descripcion) + '</p>' +
             etiquetasHtml +
-            '<div class="acciones">' + abrirHtml + codigoHtml + '</div>' +
+            '<div class="acciones">' + abrirHtml + codigoHtml + notaHtml + '</div>' +
           '</div>';
         grid.appendChild(card);
       });

@@ -1,5 +1,22 @@
 [
   {
+    "titulo": "Drosophila: simulador de optogenética",
+    "nivel": "Bachillerato · Licenciatura",
+    "descripcion": "Un sandbox para aprender optogenética jugando con el cerebro completo de la mosca de la fruta: 138 639 neuronas y 15 millones de conexiones reales del conectoma FlyWire, simuladas con el modelo de Shiu y col. (2024). Elige cualquier tipo de neurona, ponle una opsina, enciende la luz y mira qué hace la mosca en 3D. Incluye una ruta de retos estilo Duolingo, una consola para escribir protocolos y un modo competencia para clase con tablero en vivo.",
+    "etiquetas": [
+      "Optogenética",
+      "Conectoma FlyWire",
+      "Neurociencia",
+      "Windows"
+    ],
+    "enlace": "https://github.com/Axolotl-Discovery/drosophila/releases/latest/download/Drosophila-win64.zip",
+    "descarga": true,
+    "boton": "Descargar para Windows",
+    "nota": "Windows 10/11 de 64 bits · 160 MB · descomprime y abre Drosophila.exe",
+    "codigo": "https://github.com/Axolotl-Discovery/drosophila",
+    "imagen": "assets/educacion/drosophila.jpg"
+  },
+  {
     "titulo": "Axolotl Docking",
     "nivel": "Licenciatura · Posgrado",
     "descripcion": "App de terminal para hacer docking molecular de principio a fin con un solo comando. Le das las proteínas (PDB, UniProt o archivo) y los ligandos (nombre, CID de PubChem o SMILES), y ella descarga las estructuras, limpia los receptores, calcula la caja, valida por redocking, corre smina con varias semillas y arma la tabla de afinidades y el análisis de interacciones. Tiene modo básico (todo automático) y avanzado, y soporta metales poco comunes como el vanadio con AutoDock4.",
