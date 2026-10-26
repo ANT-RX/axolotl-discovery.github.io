@@ -242,6 +242,11 @@
   .edu-card a.abrir { background: var(--rosa); color: #fff; text-decoration: none; font-size: 15px; font-weight: 500; padding: 9px 20px; border-radius: 980px; }
   .edu-card a.abrir:hover { background: var(--rosa-dark); }
   .edu-card .nota { flex-basis: 100%; font-size: 13px; color: var(--gray-500); }
+  .edu-card a.abrir.alt { background: transparent; color: var(--rosa); box-shadow: inset 0 0 0 1px var(--rosa); }
+  .edu-card a.abrir.alt:hover { background: #fdf1f5; }
+  .edu-card .otras { font-size: 14px; color: var(--gray-500); }
+  .edu-card .otras a { color: var(--rosa); text-decoration: none; }
+  .edu-card .otras a:hover { text-decoration: underline; }
 
   /* Visor 3D del portafolio */
   .proyecto-card.con-visor { grid-column: 1 / -1; flex-direction: row; }
@@ -1116,6 +1121,21 @@
           }).join('') + '</div>';
         }
         var abrirHtml = h.enlace ? '<a class="abrir" href="' + esc(h.enlace) + '"' + (h.descarga ? '' : ' target="_blank" rel="noopener"') + '>' + esc(h.boton || 'Abrir herramienta') + '</a>' : '';
+        if (h.descargas && h.descargas.length) {
+          // Varias descargas (una por sistema): la del sistema del visitante va rellena, las demás con borde.
+          var ua = navigator.userAgent || '';
+          var so = /iPhone|iPad|Android/.test(ua) ? '' : /Mac/.test(ua) ? 'mac' : /Win/.test(ua) ? 'windows' : '';
+          var prin = h.descargas.filter(function(d) { return !d.secundario; });
+          var hayMatch = prin.some(function(d) { return d.so === so; });
+          abrirHtml = prin.map(function(d, i) {
+            var lleno = hayMatch ? d.so === so : i === 0;
+            return '<a class="abrir' + (lleno ? '' : ' alt') + '" href="' + esc(d.enlace) + '">' + esc(d.boton) + '</a>';
+          }).join('');
+          var sec = h.descargas.filter(function(d) { return d.secundario; });
+          if (sec.length) abrirHtml += '<span class="otras">' + sec.map(function(d) {
+            return '<a href="' + esc(d.enlace) + '">' + esc(d.boton) + '</a>';
+          }).join(' · ') + '</span>';
+        }
         var notaHtml = h.nota ? '<span class="nota">' + esc(h.nota) + '</span>' : '';
         var codigoHtml = h.codigo ? '<a class="enlace" href="' + esc(h.codigo) + '" target="_blank" rel="noopener">Código fuente ›</a>' : '';
         card.innerHTML = thumbHtml +

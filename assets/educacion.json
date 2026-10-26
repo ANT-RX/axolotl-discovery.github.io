@@ -7,12 +7,27 @@
       "Optogenética",
       "Conectoma FlyWire",
       "Neurociencia",
-      "Windows"
+      "Windows · Mac"
     ],
-    "enlace": "https://github.com/Axolotl-Discovery/drosophila/releases/latest/download/Drosophila-win64.zip",
-    "descarga": true,
-    "boton": "Descargar para Windows",
-    "nota": "Windows 10/11 de 64 bits · 160 MB · descomprime y abre Drosophila.exe",
+    "descargas": [
+      {
+        "so": "windows",
+        "boton": "Descargar para Windows",
+        "enlace": "https://github.com/Axolotl-Discovery/drosophila/releases/latest/download/Drosophila-win64.zip"
+      },
+      {
+        "so": "mac",
+        "boton": "Descargar para Mac",
+        "enlace": "https://github.com/Axolotl-Discovery/drosophila/releases/latest/download/Drosophila-mac-apple.zip"
+      },
+      {
+        "so": "mac-intel",
+        "boton": "¿Mac con Intel?",
+        "enlace": "https://github.com/Axolotl-Discovery/drosophila/releases/latest/download/Drosophila-mac-intel.zip",
+        "secundario": true
+      }
+    ],
+    "nota": "Windows 10/11 o macOS 11+ · 8 GB de RAM · instrucciones en LEEME.txt dentro del .zip",
     "codigo": "https://github.com/Axolotl-Discovery/drosophila",
     "imagen": "assets/educacion/drosophila.jpg"
   },

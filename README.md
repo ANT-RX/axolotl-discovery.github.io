@@ -25,5 +25,8 @@ Solo `titulo` y `descripcion` son obligatorios; los demás campos se pueden omit
 Para una app que se descarga (en vez de abrirse en el navegador) agrega:
 `"descarga": true` (el enlace se abre en la misma pestaña), `"boton": "Descargar para Windows"`
 (texto del botón; por defecto "Abrir herramienta") y `"nota": "Windows 10/11 · 160 MB"` (texto pequeño bajo el botón).
+Para una app con varias descargas (una por sistema) usa en su lugar `"descargas"`: una lista de
+`{"so": "windows" | "mac" | ..., "boton": "Descargar para Mac", "enlace": "..."}`. El botón del sistema del visitante
+sale relleno y los demás con borde; con `"secundario": true` la opción sale como enlace pequeño (p. ej. Mac con Intel).
 Para que el enlace siempre baje la última versión usa
 `https://github.com/<org>/<repo>/releases/latest/download/<archivo>`.
