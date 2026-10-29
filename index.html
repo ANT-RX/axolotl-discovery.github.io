@@ -868,6 +868,13 @@
     });
   }
 
+  // Solo deja pasar enlaces http(s), mailto o rutas relativas del propio sitio.
+  // esc() escapa HTML pero no impide esquemas como javascript: en un href.
+  function urlSegura(u) {
+    var t = String(u == null ? '' : u).trim();
+    return /^(https?:\/\/|mailto:|\.{1,2}\/|assets\/|#)/i.test(t) ? t : '#';
+  }
+
   // Carga la librería 3Dmol.js (local, en assets/lib)
   var _3dmolPromise = null;
   function cargar3Dmol() {
@@ -1072,7 +1079,7 @@
           }).join('') + '</div>';
         }
         var hintHtml = conVisor ? '<p class="visor-hint">Arrastra para rotar, usa la rueda o pellizca para acercar y elige el complejo debajo del visor.</p>' : '';
-        var enlaceHtml = p.enlace ? '<a class="enlace" href="' + esc(p.enlace) + '" target="_blank" rel="noopener">Ver el proyecto en GitHub ›</a>' : '';
+        var enlaceHtml = p.enlace ? '<a class="enlace" href="' + esc(urlSegura(p.enlace)) + '" target="_blank" rel="noopener">Ver el proyecto en GitHub ›</a>' : '';
 
         card.innerHTML = (conVisor ? '<div class="visor-col"></div>' : thumbHtml) +
           '<div class="body">' +
@@ -1121,7 +1128,7 @@
             return '<span class="etiqueta">' + esc(t) + '</span>';
           }).join('') + '</div>';
         }
-        var abrirHtml = h.enlace ? '<a class="abrir" href="' + esc(h.enlace) + '"' + (h.descarga ? '' : ' target="_blank" rel="noopener"') + '>' + esc(h.boton || 'Abrir herramienta') + '</a>' : '';
+        var abrirHtml = h.enlace ? '<a class="abrir" href="' + esc(urlSegura(h.enlace)) + '"' + (h.descarga ? '' : ' target="_blank" rel="noopener"') + '>' + esc(h.boton || 'Abrir herramienta') + '</a>' : '';
         if (h.descargas && h.descargas.length) {
           // Varias descargas (una por sistema): la del sistema del visitante va rellena, las demás con borde.
           var ua = navigator.userAgent || '';
@@ -1130,15 +1137,15 @@
           var hayMatch = prin.some(function(d) { return d.so === so; });
           abrirHtml = prin.map(function(d, i) {
             var lleno = hayMatch ? d.so === so : i === 0;
-            return '<a class="abrir' + (lleno ? '' : ' alt') + '" href="' + esc(d.enlace) + '">' + esc(d.boton) + '</a>';
+            return '<a class="abrir' + (lleno ? '' : ' alt') + '" href="' + esc(urlSegura(d.enlace)) + '">' + esc(d.boton) + '</a>';
           }).join('');
           var sec = h.descargas.filter(function(d) { return d.secundario; });
           if (sec.length) abrirHtml += '<span class="otras">' + sec.map(function(d) {
-            return '<a href="' + esc(d.enlace) + '">' + esc(d.boton) + '</a>';
+            return '<a href="' + esc(urlSegura(d.enlace)) + '">' + esc(d.boton) + '</a>';
           }).join(' · ') + '</span>';
         }
         var notaHtml = h.nota ? '<span class="nota">' + esc(h.nota) + '</span>' : '';
-        var codigoHtml = h.codigo ? '<a class="enlace" href="' + esc(h.codigo) + '" target="_blank" rel="noopener">Código fuente ›</a>' : '';
+        var codigoHtml = h.codigo ? '<a class="enlace" href="' + esc(urlSegura(h.codigo)) + '" target="_blank" rel="noopener">Código fuente ›</a>' : '';
         card.innerHTML = thumbHtml +
           '<div class="body">' +
             '<h3>' + esc(h.titulo) + '</h3>' +
